@@ -1,7 +1,0 @@
-## Frontend
-
-
-## Backend
-
-
-## Hosting
