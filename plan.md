@@ -1,5 +1,5 @@
 ## Frontend
-1. Design the pages with whiteboard - does not need much detail
+1. Design the pages with whiteboard - does not need much cosmetic detail
 2. Map out complete flow of the entire game from login to final leaderboard
 
 ## Backend
