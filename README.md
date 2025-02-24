@@ -1,4 +1,4 @@
-## Setup
+## Base setup
 
 Do everything in the root directory.
 
@@ -13,7 +13,7 @@ Install all the pip requirements to run the project. Use
 pip install -r requirements.txt
 ```
 
-## Postgres setup on local machine -- the database will later be hosted
+## Postgres setup on local machine
 
 If you have not already, install postgres 17
 ```bash
@@ -60,6 +60,8 @@ the db and setup our environment variables. Always run `source .SECRETS` before 
 touch .pgpass
 echo "HOST:POST:NAME:USER:<password>" > .pgpass
 ```
+
+## Run
 
 Now that everything is setup, run the following commands. These commands should always be run if
 there are any changes to the models and hence db structure. These commands initialise and update
