@@ -60,7 +60,7 @@ the db and setup our environment variables. Always run `source .SECRETS` before 
 touch .pgpass
 echo "HOST:POST:NAME:USER:<password>" > .pgpass
 touch .SECRETS
-cat <<EOF > env_vars.sh
+cat <<EOF > .SECRETS
 export PGNAME=wagerwars_db
 export PGPASSWORD=<password>
 export PGHOST=localhost
