@@ -1,69 +1,71 @@
-## Setup
+## Base setup
 
-### Python environment
+Do everything in the root directory.
 
-All of the above commands should be executed in the root directory, unless
-otherwise stated.
-
-First, create and source a python virtual environment using
-
+On first pull create a python virtual environment. Before you start working always source this virtual environment.
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 ```
 
-Then, install pip requirements using
-
+Install all the pip requirements to run the project. Use
 ```bash
 pip install -r requirements.txt
 ```
 
-### Postgres for local testing
+## Postgres setup on local machine
 
-First, if you don't already have it, install postgres 17.
-
+If you have not already, install postgres 17
 ```bash
 brew install postgres@17
-brew link postgres@17 # if you have multiple installations
 ```
 
-Now, you should see something similar when you run
-
+Check you version with
 ```bash
 $ psql --version
-psql (PostgreSQL) 17.0 (Homebrew)
+psql (PostgreSQL) 17.4 (Homebrew)
 ```
 
-Run the following to enter the postgres command line:
+If you have an an outdated version also installed like v14,
+you may have to stop the service, unlink the version, link with v17,
+and then restart the service. I will leave this for you to figure out.
 
+Ensure you have created a super user with
+```bash
+python manage.py createsuperuser
+```
+I recommend calling it `admin`.
+
+We enter the postgres command line with
 ```bash
 psql -U postgres
 ```
 
-Then, once in the postgres command line
-(you should see @postgres=# before your cursor) execute the following commands.
-Note: replace password with the actual password, this should match whatever your
-`.pgpass` file says later on.
-
-```sql
+Run the following commands to correctly setup your local db instance.
+The password should match whatever you put into the .pgpass file later on.
+I recommend keeping this wagerwars for now. Whatever is in quotes must remain in quotes.
+```bash
 CREATE DATABASE wager_db;
-CREATE USER boss WITH PASSWORD '<password>';
-ALTER ROLE boss SET client_encoding TO 'utf8';
-ALTER ROLE boss SET default_transaction_isolation TO 'read committed';
-ALTER ROLE boss SET timezone TO 'UTC';
-GRANT ALL PRIVILEGES ON DATABASE wager_db TO boss;
+CREATE USER tam WITH PASSWORD '<password>';
+ALTER ROLE tam SET client_encoding TO 'utf8';
+ALTER ROLE tam SET default_transaction_isolation TO 'read committed';
+ALTER ROLE tam SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE wager_db TO tam;
+ALTER DATABASE wager_db OWNER TO tam;
 ```
 
-Now that you've created the database table, create a file called `.pgpass` within
-`backend/`, and write the following to the file. Again, replace <password> with
-the actual password.
-
+Next we need to create the `.pgpass` and `.SECRETS` files to allow Django to access
+the db and setup our environment variables. Always run `source .SECRETS` before starting development.
+```bash
+touch .pgpass
+echo "HOST:POST:NAME:USER:<password>" > .pgpass
 ```
-HOST:PORT:NAME:USER:<password>
-```
 
-Now that you've completed these steps, you should be able to run
+## Run
 
+Now that everything is setup, run the following commands. These commands should always be run if
+there are any changes to the models and hence db structure. These commands initialise and update
+the database as required with the specification defined in `core/models.py`
 ```bash
 python manage.py makemigrations
 python manage.py makemigrations core
@@ -71,4 +73,14 @@ python manage.py migrate
 python manage.py migrate core
 ```
 
-Which will initialize your database.
+Before running the application ensure you have installed the required dependencies and compiled.
+```bash
+# Only needs to be run when new dependencies are added
+bun install
+bun run build
+```
+
+To run the server on localhost `127.0.0.1`, run
+```bash
+python manage.py runserver
+```
