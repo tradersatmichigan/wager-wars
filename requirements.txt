@@ -1,4 +1,0 @@
-django
-psycopg
-psycopg-binary
-
