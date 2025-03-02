@@ -10,7 +10,9 @@ import {
     Select,
     MenuItem,
     FormControl,
-    InputLabel
+    InputLabel,
+    Checkbox,
+    FormControlLabel
 } from "@mui/material";
 
 //import CoinForm from "@/forms/coin";
@@ -21,10 +23,11 @@ import {
 Ts took a long ass time to make, but it works? Only implemented Coin and Dice so far. The file is hella long and 
 I tried to break it up into separate files but couldn't get it to work (see forms folder if u want to try), there
 was an issue with page not loading at all since the default game is null i think. Lowkey doing the Dice form made me 
-realize the back end for that is gonna be a hella tuff to implement. Also am still working on making the face weights
-more seamless. Right now inputs are handle on change which refreshes the page and makes you re-select the box you 
-were typing in. I'm trying to figure out how I can update the weights on clicking the submit button. I also still
-need to implement what happens after the submit is clicked (it starts the round and a timer).
+realize the back end for that is gonna be a hella tuff to implement. Also am running into an rendering issue
+I am using a bunch of uncontrolled text fields because otherwise you have to reselect the field for every character you
+type, but now these fields are getting cleared everytime something else updates. I am trying to figure out how to only 
+re-render specific components or only rerender on submission. I also still need to implement what happens after 
+the submit is clicked (it starts the round and a timer).
 
 */
 
@@ -160,45 +163,52 @@ function Control() {
     const [rollType, setRollType] = useState("Frequency Roll");
     const [diceCount, setDiceCount] = useState<number>(1);
     const [diceFaces, setDiceFaces] = useState<number>(6);
-    const [faceWeights, setFaceWeights] = useState<string[]>([]);
+    const faceWeightRefs = useRef<(HTMLInputElement | null)[]>([]);
     const [faceWeightError, setfaceWeightError] = useState(false);
     const [faceWeightHelper, setFaceWeightHelper] = useState("");
     const thresholdRef = useRef<HTMLInputElement>(null);
     const [thresholdError, setThresholdError] = useState(false);
     const [thresholdHelper, setThresholdHelper] = useState("");
     const [thresholdDirection, setThresholdDirection] = useState("");
+    const [selectedTargets, setSelectedTargets] = useState<boolean[]>([]);
     
     const numbers = Array.from({ length: 20 }, (_, index) => index + 1);
     
     useEffect(() => {
-        setFaceWeights(Array.from({ length: diceFaces }, () => ""));
+        //faceWeightRefs.current = Array(diceFaces).fill(null);
+        setSelectedTargets(Array.from({ length: diceFaces }, () => false));
     }, [diceFaces]);
-    
-    const handleFaceCountChange = (
-        e: React.ChangeEvent<{ value: unknown }>
-    ) => {
-        setDiceFaces(e.target.value as number);
-    };
-    
-    const handleFaceWeightChange = (
-        index: number,
-        value: string
-    ) => {
-        const updatedWeights = [...faceWeights];
-        updatedWeights[index] = value;
-        setFaceWeights(updatedWeights);
+
+    const handleTargetToggle = (index: number, checked: boolean) => {
+        const updatedTargets = [...selectedTargets];
+        updatedTargets[index] = checked;
+        setSelectedTargets(updatedTargets);
     };
 
     const validateDiceFields = (): boolean => {
         let valid  = true;
 
-        const total = faceWeights.reduce((acc, curr) => acc + Number(curr || 0), 0);
+        const weights = faceWeightRefs.current.map((ref) => ref?.value || "");
+        const total = weights.reduce((acc, curr) => acc + Number(curr || 0), 0);
+        let targetChosen = false;
+        for (const selected in selectedTargets) {
+            if (selected) {
+                targetChosen = true;
+            }
+        }
         if (total !== 100) {
             setfaceWeightError(true);
             setFaceWeightHelper("Total weight must add to 100%");
             valid = false;
         }
-        
+        else if (!targetChosen) {
+            setfaceWeightError(true);
+            setFaceWeightHelper("Must choose atleast one target");
+            valid = false;
+        } else {
+            setfaceWeightError(false);
+            setFaceWeightHelper("");
+        }
 
         const t = thresholdRef.current?.value || "";
         const num = Number(t);
@@ -215,14 +225,32 @@ function Control() {
             setThresholdHelper("");
         }
 
+        const mValue = multiplierRef.current?.value || "";
+        const numericMultiplier = Number(mValue);
+        if (!mValue) {
+            setMError(true);
+            setMultiplierHelper("Multiplier is required");
+            valid = false;
+        } else if (isNaN(numericMultiplier)) {
+            setMError(true);
+            setMultiplierHelper("Multiplier must be a number");
+            valid = false;
+        } else {
+            setMError(false);
+            setMultiplierHelper("");
+        }
+
         return valid;
     }
 
     const handleDiceSubmit = () => {
         if (validateDiceFields()) {
-            console.log("Face Weights:", faceWeights);
+            const weights = faceWeightRefs.current.map((ref) => ref?.value || "");
+            console.log("Face Weights:", weights);
             console.log("Direction:", thresholdDirection);
             console.log("Threshold:", thresholdRef);
+            console.log("Multiplier:", multiplierRef);
+            console.log("Targets:", selectedTargets);
         }
     }
     
@@ -244,6 +272,7 @@ function Control() {
                     >
                         <MenuItem value="Frequency Roll">Frequency Roll</MenuItem>
                         <MenuItem value="Sum Roll">Sum Roll</MenuItem>
+                        <MenuItem value="Even Roll">Even Roll</MenuItem>
                     </Select>
                 </FormControl>
     
@@ -275,7 +304,6 @@ function Control() {
                         label="Select # of Faces"
                         value={diceFaces}
                         sx={{ minWidth: 300}}
-                        error={faceWeightError}
                         onChange={(e) => setDiceFaces(Number(e.target.value))}
                     >
                         {numbers.map((num) => (
@@ -295,6 +323,7 @@ function Control() {
                         id="direction"
                         label="Select a Direction"
                         sx={{ minWidth: 200}}
+                        value={ thresholdDirection }
                         onChange={(e) => setThresholdDirection(e.target.value as string)}
                     >
                         <MenuItem value="<">{'<'}</MenuItem>
@@ -309,28 +338,58 @@ function Control() {
                 <TextField
                 inputRef={thresholdRef}
                 label={thresholdError ? thresholdHelper : "Enter a Threshold"}
+                error={thresholdError}
                 />
+
+                <Box sx={{ width: "30px" }}></Box>
+
+                <FormControl sx={{ minWidth: 200, mb: 2 }}>
+                    <TextField
+                        label={multiplierError ? multiplierHelper : "Bet Multiplier"}
+                        variant="outlined"
+                        type="text"
+                        fullWidth
+                        error={multiplierError}
+                        inputRef={multiplierRef}
+                    />
+                </FormControl>
             </Stack>
     
-            <Box sx={{ mt: 4 }}>
+            <Box sx={{ mt: 4, mb: 2}}>
                 <Typography variant="h6" gutterBottom>
-                    Enter Weight for Each Face (%):
+                    Enter Weight for Each Face (%) and Select Targets:
                 </Typography>
                 <Typography variant="body1" gutterBottom>
                     {faceWeightError ? faceWeightHelper : "Ensure Face Weights add up to 100"}
                 </Typography>
                 <Stack direction="row" spacing={2} flexWrap="wrap" rowGap={2}>
-                    {faceWeights.map((weight, index) => (
-                        <TextField
-                        key={index}
-                        label={`Face ${index + 1}`}
-                        variant="outlined"
-                        value={weight}
-                        onChange={(e) =>
-                            handleFaceWeightChange(index, e.target.value)
-                        }
-                        sx={{ width: "100px" }}
-                        />
+                    {Array.from({ length: diceFaces }).map((_, index) => (
+                        <Stack
+                            key={index}
+                            direction="row"
+                            spacing={1}
+                            alignItems="center"
+                            sx={{ width: "150px" }}
+                        >
+                            <TextField
+                                label={`Face ${index + 1}`}
+                                variant="outlined"
+                                inputRef={(el) => (faceWeightRefs.current[index] = el)}
+                                sx={{ width: "80px" }}
+                                error={faceWeightError}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                    checked={selectedTargets[index] || false}
+                                    onChange={(e) =>
+                                        handleTargetToggle(index, e.target.checked)
+                                    }
+                                    />
+                                }
+                                label=""
+                            />
+                        </Stack>
                     ))}
                 </Stack>
             </Box>
@@ -340,6 +399,81 @@ function Control() {
             </Button>
 
         </Box>
+    );
+
+    const questionRef = useRef<HTMLInputElement>(null);
+    const [questionError, setQuestionError] = useState(false);
+    const [questionHelper, setQuestionHelper] = useState("");
+
+    const handleCardsSubmit = () => {
+        let valid = true;
+
+        const mValue = multiplierRef.current?.value || "";
+        const numericMultiplier = Number(mValue);
+        if (!mValue) {
+            setMError(true);
+            setMultiplierHelper("Multiplier is required");
+            valid = false;
+        } else if (isNaN(numericMultiplier)) {
+            setMError(true);
+            setMultiplierHelper("Multiplier must be a number");
+            valid = false;
+        } else {
+            setMError(false);
+            setMultiplierHelper("");
+        }
+
+        const q = questionRef.current?.value || "";
+        if (!q) {
+            setQuestionError(true);
+            setQuestionHelper("Question is required");
+            valid = false;
+        } else {
+            setQuestionError(false);
+            setQuestionHelper("");
+        }
+
+        if (valid) {
+            console.log("Question:", questionRef);
+            console.log("Multiplier:", multiplierRef)
+        }
+    }
+
+    const CardsFrom = () => (
+        <Box sx={{ mt: 4 }}>
+            <Stack direction={"row"} spacing={2} marginBottom={2}>
+                <FormControl sx={{ minWidth: 200, mb: 2 }}>
+                    <TextField
+                        label={multiplierError ? multiplierHelper : "Bet Multiplier"}
+                        variant="outlined"
+                        type="text"
+                        fullWidth
+                        error={multiplierError}
+                        inputRef={multiplierRef}
+                    />
+                </FormControl>
+
+                <TextField
+                    variant="outlined"
+                    label={questionError ? questionHelper : "Enter your Question"}
+                    error={questionError}
+                    fullWidth
+                    inputRef={questionRef}
+                />
+            </Stack>
+
+            <Button variant="contained" onClick={handleCardsSubmit}>
+                Submit Cards Settings
+            </Button>
+        </Box>
+    );
+
+    const OtherFrom = () => (
+        <Typography
+            variant="h1"
+        >
+            Do we even need this, can we just combine with the card form?
+        </Typography>
     );
 
     return (
@@ -369,6 +503,7 @@ function Control() {
                     <Button
                         variant="contained"
                         sx={{ fontSize: "1.25rem", padding: "24px 48px" }}
+                        onClick={() => setSelectedGame("cards")}
                     >
                         Cards
                     </Button>
@@ -376,6 +511,7 @@ function Control() {
                     <Button
                         variant="contained"
                         sx={{ fontSize: "1.25rem", padding: "24px 48px" }}
+                        onClick={() => setSelectedGame("other")}
                     >
                         Other
                     </Button>
@@ -383,6 +519,8 @@ function Control() {
 
                 {selectedGame === "coin" && <CoinForm />}
                 {selectedGame === "dice" && <DiceForm />}
+                {selectedGame === "cards" && <CardsFrom />}
+                {selectedGame === "other" && <OtherFrom />}
             </Paper>
         </Container>
     );
