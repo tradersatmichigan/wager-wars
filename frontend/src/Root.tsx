@@ -1,4 +1,5 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import { 
   Box, 
   Typography, 
@@ -28,45 +29,7 @@ const Root = () => {
 
   return (
     <Box sx={containerStyle}>
-      <Container maxWidth="md">
-        <Paper elevation={3} sx={paperStyle}>
-          <Stack spacing={4}>
-            <Typography variant="h2" component="h1" gutterBottom>
-              Welcome to Your App
-            </Typography>
-            
-            <Typography variant="h6" color="text.secondary">
-              Your new platform is being built with care. 
-              Stay tuned for amazing features.
-            </Typography>
-
-            <Stack 
-              direction={{ xs: 'column', sm: 'row' }} 
-              spacing={2} 
-              justifyContent="center"
-            >
-              <Button 
-                variant="contained" 
-                size="large"
-                endIcon={<ArrowForwardIcon />}
-              >
-                Get Started
-              </Button>
-              
-              <Button 
-                variant="outlined" 
-                size="large"
-              >
-                Learn More
-              </Button>
-            </Stack>
-
-            <Typography variant="body2" color="text.secondary" sx={{ pt: 2 }}>
-              Built with React + TypeScript + Material UI
-            </Typography>
-          </Stack>
-        </Paper>
-      </Container>
+      <Outlet />
     </Box>
   );
 };

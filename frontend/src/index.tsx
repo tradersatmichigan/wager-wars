@@ -3,8 +3,12 @@ import React from "react";
 //import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 //
-// Components (Import your components here)
+// Components (Import your components here)c
 import Root from "./Root";
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login"
+import Control from "./pages/Control"
+import { Lan } from "@mui/icons-material";
 
 //const theme = createTheme({
 //  typography: {
@@ -47,14 +51,21 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     children: [
-      //{
-      //  path: "/",
-      //  element: <Dashboard />,
-      //},
-      //{
-      //  path: "desks/:deskId",
-      //  element: <DeskView />,
-      //},
+      {
+        path: "",
+        element: <LandingPage />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+    ],
+  },
+  {
+    path: "/control",
+    element: <Control />,
+    children: [
+
     ],
   },
 ],
