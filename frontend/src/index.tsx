@@ -8,7 +8,10 @@ import Root from "./Root";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login"
 import Control from "./pages/Control"
-import { Lan } from "@mui/icons-material";
+import CoinGame from "./pages/CoinGame";
+import DiceGame from "./pages/DiceGame";
+import CardGame from "./pages/CardGame";
+import ControlResults from "./pages/ControlResults";
 
 //const theme = createTheme({
 //  typography: {
@@ -62,11 +65,27 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/control",
+    path: "/control/",
     element: <Control />,
     children: [
 
     ],
+  },
+  {
+    path: "/control/coingame",
+    element: <CoinGame />
+  },
+  {
+    path: "/control/dicegame",
+    element: <DiceGame />
+  },
+  {
+    path: "/control/cardgame",
+    element: <CardGame />
+  },
+  {
+    path: "/control/results",
+    element: <ControlResults />
   },
 ],
 //{

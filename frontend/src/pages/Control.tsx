@@ -14,6 +14,7 @@ import {
     Checkbox,
     FormControlLabel
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 //import CoinForm from "@/forms/coin";
 //import DiceForm from "@/forms/dice";
@@ -32,6 +33,7 @@ the submit is clicked (it starts the round and a timer).
 */
 
 function Control() {
+    const navigate = useNavigate();
     const [selectedGame, setSelectedGame] = useState<string | null>(null);
 
     const multiplierRef = useRef<HTMLInputElement>(null);
@@ -104,6 +106,7 @@ function Control() {
             console.log("Weight value:", weightValue);
             console.log("Bet Multiplier:", multiplierRef);
             // Proceed with further processing or API call
+            navigate("/control/coingame");
         }
     };
     
@@ -251,6 +254,7 @@ function Control() {
             console.log("Threshold:", thresholdRef);
             console.log("Multiplier:", multiplierRef);
             console.log("Targets:", selectedTargets);
+            navigate("/control/dicegame");
         }
     }
     
@@ -436,6 +440,7 @@ function Control() {
         if (valid) {
             console.log("Question:", questionRef);
             console.log("Multiplier:", multiplierRef)
+            navigate("/control/cardgame")
         }
     }
 

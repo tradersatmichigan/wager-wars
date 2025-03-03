@@ -26,7 +26,7 @@ function Login() {
     console.log("Logging in with:", username, password);
 
     if (username == "admin" && password == "admin") {
-        navigate("/control");
+        navigate("/control/");
     } else {
         navigate("/home");
     }
