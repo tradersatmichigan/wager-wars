@@ -30,12 +30,6 @@ If you have an an outdated version also installed like v14,
 you may have to stop the service, unlink the version, link with v17,
 and then restart the service. I will leave this for you to figure out.
 
-Ensure you have created a super user with
-```bash
-python manage.py createsuperuser
-```
-I recommend calling it `admin`.
-
 We enter the postgres command line with
 ```bash
 psql -U postgres
@@ -66,6 +60,12 @@ export PGPASSWORD=<password>
 export PGHOST=localhost
 EOF
 ```
+
+Ensure you have created a super user with
+```bash
+python manage.py createsuperuser
+```
+I recommend calling it `admin`.
 
 ## Run
 
