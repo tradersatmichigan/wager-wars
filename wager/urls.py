@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .views import current_user_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("core.urls")),
+    path('api/current_user', current_user_view, name='current_user'),
 ]

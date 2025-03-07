@@ -15,12 +15,13 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "@mui/x-charts": "^7.27.1",
     "react": "latest",
     "react-dom": "latest",
     "react-router-dom": "latest"
   },
   "scripts": {
-    "dev": "bun build --outdir ./static/js --target browser frontend/src/index.tsx --watch --root . --entry-naming '[name].js'",
+    "dev": "bun build --outdir ./static/js --target browser frontend/src/index.tsx frontend/src/betting1.tsx  frontend/src/betting2.tsx frontend/src/betting3.tsx --watch --root . --entry-naming '[name].js'",
     "build": "bun build --outdir ./static/js --target browser frontend/src/index.tsx --root . --entry-naming '[name].js'"
   }
 }

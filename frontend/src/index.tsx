@@ -1,3 +1,5 @@
+// Only thing added to this is navbar.
+
 import * as ReactDOM from "react-dom/client";
 import React from "react";
 //import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
@@ -5,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 //
 // Components (Import your components here)
 import Root from "./Root";
+import NavBar from "./base"
 
 //const theme = createTheme({
 //  typography: {
@@ -66,6 +69,7 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
+  <NavBar /> 
   {/*<ThemeProvider theme={theme}>*/}
   {/*<CssBaseline />*/}
   <RouterProvider router={router} />

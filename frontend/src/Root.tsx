@@ -27,6 +27,7 @@ const Root = () => {
   };
 
   return (
+
     <Box sx={containerStyle}>
       <Container maxWidth="md">
         <Paper elevation={3} sx={paperStyle}>
@@ -50,7 +51,7 @@ const Root = () => {
                 size="large"
                 endIcon={<ArrowForwardIcon />}
               >
-                Get Started
+                GStarted
               </Button>
               
               <Button 

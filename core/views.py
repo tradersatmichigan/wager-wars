@@ -18,3 +18,16 @@ class SignUpView(CreateView):
 @login_required
 def render_url(request) -> HttpResponse:
     return render(request, "index.html")
+
+@login_required
+def render_betting1(request) -> HttpResponse:
+    return render(request, "betting1.html")
+
+@login_required
+def render_betting2(request) -> HttpResponse:
+    return render(request, "betting2.html")
+
+@login_required
+def render_betting3(request) -> HttpResponse:
+    return render(request, "betting3.html")
+
