@@ -5,6 +5,8 @@ but only the final bet counts. We should be extremely diligent w/ security for t
 
 Question: Do we want them to be able to click 'enter' multiple times or if they submit they are done. The former is nicer for the UI
 but the latter is more secure.
+
+AFAIK this is the only file which should handle updating DB values using input from the user.
 */
 
 
@@ -44,7 +46,7 @@ export default function BetForm() {
         }
     };
 
-    
+
     return (
         <Box component="form" onSubmit={handleSubmit} sx={formStyle}>
             <Typography variant="h5">Place Bet</Typography>
