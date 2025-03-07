@@ -1,0 +1,4 @@
+\conninfo     
+\l              
+\du             
+SELECT version();
