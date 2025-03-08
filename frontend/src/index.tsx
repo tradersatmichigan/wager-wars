@@ -78,6 +78,7 @@ root.render(
   {/*<ThemeProvider theme={theme}>*/}
   {/*<CssBaseline />*/}
   <RouterProvider router={router} />
+
   {/*</ThemeProvider>*/}
   </React.StrictMode>,
 );

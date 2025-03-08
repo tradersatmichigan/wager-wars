@@ -10,7 +10,6 @@ import {Box} from '@mui/material';
 // It's also unclear whether this is what causes it to look like shit or not. Someone who knows MUI
 // should try to make it look better. 
 export default function Betting1() {
-
     return (
         <Box
             sx={{
@@ -26,6 +25,7 @@ export default function Betting1() {
             <Leaderboard /> 
             <PL_Chart/>
             <TeamInfo/>
+
         </Box>
     )
 }
