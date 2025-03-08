@@ -9,6 +9,7 @@ import {
   Stack
 } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import NavBar from './client/base';
 
 const Root = () => {
   const containerStyle = {
@@ -30,13 +31,24 @@ const Root = () => {
   /*
    * if user == admin, return the control root
    * else, return the player flow
-  */
+   */
 
-  return (
-    <Box sx={containerStyle}>
-      <Outlet />
-    </Box>
-  );
+
+  let is_admin = false
+  if (is_admin) {
+    return (
+      <Box sx={containerStyle}>
+        <Outlet />
+      </Box>
+    );
+  } else {
+    return (
+      <>
+        <NavBar/>
+        <Outlet/>
+      </>
+    )
+  }
 };
 
 export default Root;
