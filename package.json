@@ -14,10 +14,10 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "latest",
-    "@mui/material": "latest",
+    "@mui/material": "^6.4.6",
     "react": "latest",
     "react-dom": "latest",
-    "react-router-dom": "latest"
+    "react-router-dom": "^7.2.0"
   },
   "scripts": {
     "dev": "bun build --outdir ./static/js --target browser frontend/src/index.tsx --watch --root . --entry-naming '[name].js'",

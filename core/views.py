@@ -6,14 +6,9 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
-def index(_: HttpRequest) -> HttpResponse:
-    msg = b"Hello, world. You're at the polls index."
-    return HttpResponse(msg)
-
-class SignUpView(CreateView):
-    form_class = BaseUserCreationForm
-    success_url = reverse_lazy("login")
-    template_name = "signup.html"
+# def index(_: HttpRequest) -> HttpResponse:
+#     msg = b"Hello, world. You're at the polls index."
+#     return HttpResponse(msg)
 
 @login_required
 def render_url(request) -> HttpResponse:

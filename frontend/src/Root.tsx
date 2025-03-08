@@ -1,4 +1,5 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import { 
   Box, 
   Typography, 
@@ -8,6 +9,7 @@ import {
   Stack
 } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import NavBar from './client/base';
 
 const Root = () => {
   const containerStyle = {
@@ -26,49 +28,27 @@ const Root = () => {
     margin: 'auto'
   };
 
-  return (
-    <Box sx={containerStyle}>
-      <Container maxWidth="md">
-        <Paper elevation={3} sx={paperStyle}>
-          <Stack spacing={4}>
-            <Typography variant="h2" component="h1" gutterBottom>
-              Welcome to Your App
-            </Typography>
-            
-            <Typography variant="h6" color="text.secondary">
-              Your new platform is being built with care. 
-              Stay tuned for amazing features.
-            </Typography>
+  /*
+   * if user == admin, return the control root
+   * else, return the player flow
+   */
 
-            <Stack 
-              direction={{ xs: 'column', sm: 'row' }} 
-              spacing={2} 
-              justifyContent="center"
-            >
-              <Button 
-                variant="contained" 
-                size="large"
-                endIcon={<ArrowForwardIcon />}
-              >
-                Get Started
-              </Button>
-              
-              <Button 
-                variant="outlined" 
-                size="large"
-              >
-                Learn More
-              </Button>
-            </Stack>
 
-            <Typography variant="body2" color="text.secondary" sx={{ pt: 2 }}>
-              Built with React + TypeScript + Material UI
-            </Typography>
-          </Stack>
-        </Paper>
-      </Container>
-    </Box>
-  );
+  let is_admin = false
+  if (is_admin) {
+    return (
+      <Box sx={containerStyle}>
+        <Outlet />
+      </Box>
+    );
+  } else {
+    return (
+      <>
+        <NavBar/>
+        <Outlet/>
+      </>
+    )
+  }
 };
 
 export default Root;

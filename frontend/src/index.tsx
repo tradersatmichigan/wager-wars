@@ -3,8 +3,16 @@ import React from "react";
 //import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 //
-// Components (Import your components here)
+// Components (Import your components here)c
 import Root from "./Root";
+import LandingPage from "./control/LandingPage";
+import Control from "./control/Control"
+import CoinGame from "./control/CoinGame";
+import DiceGame from "./control/DiceGame";
+import CardGame from "./control/CardGame";
+import ControlResults from "./control/ControlResults";
+import Betting1 from "./client/betting1";
+import Betting2 from "./client/betting2";
 
 //const theme = createTheme({
 //  typography: {
@@ -47,14 +55,38 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     children: [
-      //{
-      //  path: "/",
-      //  element: <Dashboard />,
-      //},
-      //{
-      //  path: "desks/:deskId",
-      //  element: <DeskView />,
-      //},
+      {
+        path: "",
+        element: <LandingPage />,
+      },
+      {
+        path: "betting1",
+        element: <Betting1/>,
+      },
+      {
+        path: "betting2",
+        element: <Betting2/>
+      },
+      {
+        path: "/control/",
+        element: <Control />,
+      },
+      {
+        path: "/control/coingame",
+        element: <CoinGame />
+      },
+      {
+        path: "/control/dicegame",
+        element: <DiceGame />
+      },
+      {
+        path: "/control/cardgame",
+        element: <CardGame />
+      },
+      {
+        path: "/control/results",
+        element: <ControlResults />
+      },
     ],
   },
 ],
