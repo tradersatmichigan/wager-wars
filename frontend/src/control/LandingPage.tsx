@@ -66,7 +66,7 @@ function LandingPage() {
             variant="contained"
             size="large"
             component={Link}  // from react-router-dom
-            to="/login"       // navigate to your login route
+            to="/control"       // navigate to your login route
           >
             I'm Ready to Play!
           </Button>

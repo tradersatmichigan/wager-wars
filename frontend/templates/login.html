@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+    <h2 style="text-align: center; margin-bottom: 20px;">Log in to your account</h2>
+    
+    {% if form.errors %}
+    <div style="color: #721c24; background-color: #f8d7da; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+        <p>Your username and password didn't match. Please try again.</p>
+    </div>
+    {% endif %}
+    
+    {% if next %}
+        {% if user.is_authenticated %}
+        <div style="color: #856404; background-color: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+            <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+        </div>
+        {% else %}
+        <div style="color: #0c5460; background-color: #d1ecf1; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+            <p>Please login to see this page.</p>
+        </div>
+        {% endif %}
+    {% endif %}
+    
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div style="margin-bottom: 15px;">
+            <label for="id_username" style="display: block; margin-bottom: 5px;">Username</label>
+            <input type="text" name="username" id="id_username" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" autocomplete="username" required autofocus>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label for="id_password" style="display: block; margin-bottom: 5px;">Password</label>
+            <input type="password" name="password" id="id_password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" autocomplete="current-password" required>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: flex; align-items: center;">
+                <input type="checkbox" name="remember" id="id_remember" style="margin-right: 5px;">
+                Remember me
+            </label>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <button type="submit" style="width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Log In</button>
+        </div>
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
+    
+</div>
+{% endblock %}

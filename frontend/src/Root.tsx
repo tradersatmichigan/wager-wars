@@ -27,6 +27,11 @@ const Root = () => {
     margin: 'auto'
   };
 
+  /*
+   * if user == admin, return the control root
+   * else, return the player flow
+  */
+
   return (
     <Box sx={containerStyle}>
       <Outlet />

@@ -5,13 +5,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 //
 // Components (Import your components here)c
 import Root from "./Root";
-import LandingPage from "./pages/LandingPage";
-import Login from "./pages/Login"
-import Control from "./pages/Control"
-import CoinGame from "./pages/CoinGame";
-import DiceGame from "./pages/DiceGame";
-import CardGame from "./pages/CardGame";
-import ControlResults from "./pages/ControlResults";
+import LandingPage from "./control/LandingPage";
+import Control from "./control/Control"
+import CoinGame from "./control/CoinGame";
+import DiceGame from "./control/DiceGame";
+import CardGame from "./control/CardGame";
+import ControlResults from "./control/ControlResults";
 
 //const theme = createTheme({
 //  typography: {
@@ -57,10 +56,6 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <LandingPage />,
-      },
-      {
-        path: "login",
-        element: <Login />,
       },
     ],
   },
