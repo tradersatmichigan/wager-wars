@@ -27,7 +27,7 @@ export const paperStyle: SxProps<Theme> = {
   padding: '40px',
   textAlign: 'center',
   maxWidth: '400px',
-  margin: 'auto'
+  margin: 'auto',
 };
 
 export const formStyle: SxProps<Theme> = {

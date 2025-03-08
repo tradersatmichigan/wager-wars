@@ -16,7 +16,7 @@ export default function NavBar() {
     const userInfo = {
         name: "Esben",
         ownStack: 124,
-        teamStack: 5839,
+        teamStack: 16849,
         teamPlace: 2,
     }
     /*

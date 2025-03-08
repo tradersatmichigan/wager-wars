@@ -1,8 +1,4 @@
 // Page for between rounds w/ team info, teammate info, and p/l graph
-
-import React from "react";
-import ReactDOM from "react-dom/client";
-import NavBar from "./base"
 import Leaderboard from "./leaderboard"
 import PL_Chart from "./PL_chart"
 import TeamInfo from "./team_info"
@@ -13,7 +9,7 @@ import {Box} from '@mui/material';
 // It looks absolutely disgusting but I couldn't get all the components to show up without doing this
 // It's also unclear whether this is what causes it to look like shit or not. Someone who knows MUI
 // should try to make it look better. 
-export default function Page() {
+export default function Betting1() {
 
     return (
         <Box
@@ -35,11 +31,5 @@ export default function Page() {
 }
 
 
-const root = ReactDOM.createRoot(document.getElementById("betting1-root")!);
-root.render(
-    <React.StrictMode>
-        <NavBar />
-        <Page />
-    </React.StrictMode>
-);
+
 
