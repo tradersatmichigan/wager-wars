@@ -13,6 +13,8 @@ import CardGame from "./control/CardGame";
 import ControlResults from "./control/ControlResults";
 import Betting1 from "./client/betting1";
 import Betting2 from "./client/betting2";
+import Out from "./theme/Test.tsx"
+import Board from "./simulation.tsx";
 
 //const theme = createTheme({
 //  typography: {
@@ -87,6 +89,10 @@ const router = createBrowserRouter([
         path: "/control/results",
         element: <ControlResults />
       },
+      {
+        path: "/test",
+        element: <Board />
+      }
     ],
   },
 ],

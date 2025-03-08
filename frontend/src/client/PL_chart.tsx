@@ -1,7 +1,7 @@
 // PL Chart using MUI charts which you need to download to see. 
 // Honestly looks pretty mid but I see potential
 
-import { LineChart } from "@mui/x-charts/LineChart";
+// import { LineChart } from "@mui/x-charts/LineChart";
 import { Box, Container } from '@mui/material';
 import { containerStyle } from "../theme/theme";
 

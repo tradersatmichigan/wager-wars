@@ -1,0 +1,42 @@
+.dice-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  /* Simple styling for the dice face */
+  .dice-face {
+    width: 80px;
+    height: 80px;
+    border: 3px solid #333;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    background: #fff;
+    transition: transform 0.6s ease;
+  }
+  
+  /* Rotate animation */
+  .dice-rolling {
+    animation: roll 1s ease;
+  }
+  
+  /* Keyframes for the rolling effect */
+  @keyframes roll {
+    0% {
+      transform: rotateX(0) rotateY(0);
+    }
+    25% {
+      transform: rotateX(360deg) rotateY(0);
+    }
+    50% {
+      transform: rotateX(360deg) rotateY(360deg);
+    }
+    100% {
+      transform: rotateX(720deg) rotateY(720deg);
+    }
+  }
+  
