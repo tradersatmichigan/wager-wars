@@ -7,10 +7,7 @@ import { Box, Container } from '@mui/material';
 
 import { containerStyle } from "../theme/theme";
 
-// Page just combines the three things we want on the opage into one object to be rendered by root.
-// It looks absolutely disgusting but I couldn't get all the components to show up without doing this
-// It's also unclear whether this is what causes it to look like shit or not. Someone who knows MUI
-// should try to make it look better. 
+
 export default function Betting1() {
     return (
 
