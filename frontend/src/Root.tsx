@@ -9,7 +9,7 @@ import {
   Stack
 } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import NavBar from './client/base';
+import NavBar from './client/navbar';
 
 const Root = () => {
   const containerStyle = {

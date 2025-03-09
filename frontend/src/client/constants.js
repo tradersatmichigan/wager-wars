@@ -1,4 +1,4 @@
-// Hardcoded info used in base.tsx. Needs to be overhauled
+// Hardcoded info used in navbar.tsx. Needs to be overhauled!
 // and made dynamic. 
 
 export const INITIAL_STACK = 1000;

@@ -1,6 +1,23 @@
+// navbar on every page.
+
+/*
+TODO: Change hardcoded data to dynamic:
+
+variables:
+
+userInfo (name, stack, team stack, team place)
+
+INITIAL_STACK and INITIAL_TEAM_STACK are defined in constants.jsx. We could just set these to whatever
+we want the team and individual starting stacks to be. However we need to be careful with this in the event
+that a team does not have 8 players. Probably needs to be set up better.
+
+*/
+
+
 import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Typography, Box } from "@mui/material";
 import { INITIAL_STACK, INITIAL_TEAM_STACK } from "./constants";
+import { headerStyle } from "@/theme/theme";
 
 export default function NavBar() {
 
@@ -54,8 +71,8 @@ export default function NavBar() {
 
     return (
         <AppBar position="static">
-            <Toolbar sx={{ bgcolor: "#bdbdbd" }}>
-                <Typography variant="h6">{userInfo.name}</Typography>
+            <Toolbar sx={{ bgcolor: "black" }}>
+                <Typography sx={{...headerStyle, color: "white"}}>{userInfo.name}</Typography>
                 <Box
                     sx={{
                         marginLeft: "auto",
@@ -64,31 +81,31 @@ export default function NavBar() {
                         gap: 10,
                     }}
                 >
-                    <Typography variant="h6">
+                      <Typography sx={{...headerStyle, color: "white"}}>
                         Stack: ${userInfo.ownStack.toFixed(0)} (
                         <Typography
                             component="span"
                             variant="inherit"
-                            sx={{ color: ownColor }}
+                            sx={{...headerStyle, color: ownColor}}
                         >
                             {ownSymbol}{ownPercentage.toFixed(0)}%
                         </Typography>
                         )
                     </Typography>
 
-                    <Typography variant="h6">
+                    <Typography sx={{...headerStyle, color: "white"}}>
                         Team Stack:  ${userInfo.teamStack.toFixed(0)} (
                         <Typography
                             component="span"
                             variant="inherit"
-                            sx={{ color: teamColor }}
+                            sx={{...headerStyle, color: teamColor}}
                         >
                             {teamSymbol}{teamPercentage.toFixed(0)}%
                         </Typography>
                         )
                     </Typography>
 
-                    <Typography variant="h6">Current Place: {userInfo.teamPlace}{postfix}</Typography>
+                 
                 </Box>
             </Toolbar>
         </AppBar>

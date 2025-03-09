@@ -1,31 +1,48 @@
 // Leaderboard object used in betting1 (between rounds page)
-// Not very complicated.
+
+/*
+TODO: Change hardcoded data to dynamic:
+
+variables:
+
+teams
+playerTeamID (only needed for style, not functionality)
+
+*/
 
 import {
     Box,
     Typography,
-    Container,
     Paper,
-    Stack
 } from '@mui/material';
 
-import { containerStyle, paperStyle } from "../theme/theme"; 
+import { paperStyle, listStyle, headerStyle, textStyle } from "../theme/theme";
 
 
 
 
 // Hardcoded needs a useEffect
 const teams = [
-    { name: "Team1", id: 1, stack: 5000 },
+    { name: "This is an extremeley long name", id: 1, stack: 50000},
     { name: "Team2", id: 2, stack: 4000 },
     { name: "Team3", id: 3, stack: 3000 },
     { name: "Team4", id: 4, stack: 2000 },
-    { name: "Team5", id: 5, stack: 0 }
+    { name: "Team5", id: 5, stack: 1000 },
+    { name: "Team6", id: 6, stack: 500 },
+    { name: "Team7", id: 7, stack: 400 },
+    { name: "Team8", id: 8, stack: 300 },
+    { name: "Team9", id: 9, stack: 200 },
+    { name: "Team10", id: 10, stack: 100 },
+    { name: "Team11", id: 11, stack: 50 },
+    { name: "Team12", id: 12, stack: 40 },
+    { name: "Team13", id: 13, stack: 30 },
+    { name: "Team14", id: 14, stack: 20 },
+    { name: "Team15", id: 15, stack: 0 }
 ];
 
 
 
-const playerTeamID = 1; //also hardcoded. Player's Team's unique ID
+const playerTeamID = 1; //also hardcoded. Player's Team's unique ID. not necesary for functionality, just for style
 
 
 
@@ -33,32 +50,53 @@ export default function Leaderboard() {
 
     return (
 
-        <Box sx={containerStyle}>
-            <Container maxWidth="md">
-                <Paper elevation={3} sx={paperStyle}>
-                    <Stack>
-                        <Typography variant="h3">
-                            Leaderboard
+        <Paper elevation={3} sx={{...paperStyle, padding: "0"}}>
+            <Typography sx={{ ...headerStyle, padding: "10px 0px 10px 0px" }}>
+                Leaderboard
+            </Typography>
+
+            <Paper elevation={3} sx={{
+                ...paperStyle, maxHeight: "40vh",
+                overflowY: "auto",
+            }}>
+
+
+                {teams.map((team, index) => (
+                    <Box
+                        key={team.id}
+                        sx={{
+                            ...listStyle,
+                            justifyContent: "space-between",
+                        }}
+                    >
+                    {/* 2 separate components for each to make sure scales w/ long team names and/or long stacks */}
+                        <Typography
+                            sx={{
+                                fontWeight: team.id === playerTeamID ? "bold" : "normal",
+                                color: team.stack > 0 ? "black" : "gray",
+                                ...textStyle,
+                            }}
+                        >
+                            {index + 1}. {team.name}
                         </Typography>
-                        {teams.map((team, index) => (
-                            <Typography key={index} variant="h5"
-                                sx={{
-                                    fontWeight: team.id === playerTeamID ? "bold" : "",
-                                    color: team.stack > 0 ? "black" : "gray",
-                                    padding: "8px",
-                                    borderRadius: "6px",
-                                }}
-
-                            >
-                                {index + 1}. {team.name} - ${team.stack} ()
-                            </Typography>
-                        ))}
 
 
-                    </Stack>
-                </Paper>
-            </Container>
-        </Box>
+                        <Typography
+                            sx={{
+                                fontWeight: team.id === playerTeamID ? "bold" : "normal",
+                                color: team.stack > 0 ? "black" : "gray",
+                                textAlign: "right",
+                                padding: "0px 0px 0px 10px",
+                                ...textStyle,
+                            }}
+                        >
+                            ${team.stack.toLocaleString()}
+                        </Typography>
+                    </Box>
+                ))}
+            </Paper>
+       </Paper>
+
     );
 };
 

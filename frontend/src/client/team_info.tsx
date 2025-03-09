@@ -1,15 +1,24 @@
 // Grabs team info for betting1 (between rounds page)
-// Just displays you teammates' stacks
+// Just displays your teammates' stacks
 
+
+/*
+TODO: Change hardcoded data to dynamic:
+
+variables:
+
+teammates
+logname (name of the current user). NOT needed for functionality, just style.
+teamname (name of user's team). NOT needed for functionality, just style.
+
+*/
 import {
     Box,
     Typography,
-    Container,
     Paper,
-    Stack
 } from '@mui/material';
 
-import { containerStyle, paperStyle } from "../theme/theme"; 
+import { containerStyle, paperStyle, listStyle, headerStyle, textStyle } from "../theme/theme";
 
 
 
@@ -21,48 +30,66 @@ const teammates = [
     { name: "Teammate3", id: 3, stack: 3000 },
     { name: "Teammate4", id: 4, stack: 2000 },
     { name: "Teammate5", id: 5, stack: 0 },
-    { name: "Esben", id: 6, stack: 2345 }
+    { name: "Esben", id: 6, stack: 2345 },
+    { name: "Esben2", id: 7, stack: 234 },
+    { name: "Esben3", id: 8, stack: 23 },
 ];
 
 const logname = "Esben" // hardcoded
 
 
-const teamName =  "Team Name"; //hardcoded
+const teamName = "Team Name"; //hardcoded
 
 
 
 
 
 export default function TeamInfo() {
-
     return (
 
-        <Box sx={containerStyle}>
-            <Container maxWidth="md">
-                <Paper elevation={3} sx={paperStyle}>
-                    <Stack>
-                        <Typography variant="h3">
-                            Team Info
+        <Paper elevation={3} sx={{ ...paperStyle, padding: "0" }}>
+            <Typography sx={{ ...headerStyle, padding: "10px 0px 10px 0px" }}>
+                Team Info
+            </Typography>
+
+            <Paper elevation={3} sx={{
+                ...paperStyle, maxHeight: "28vh",
+                overflowY: "auto",
+            }}>
+                {teammates.map((teammate, index) => (
+                    <Box
+                        key={teammate.id}
+                        sx={{
+                            ...listStyle,
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Typography
+                            sx={{
+                                fontWeight: teammate.name === logname ? "bold" : "normal",
+                                color: teammate.stack > 0 ? "black" : "gray",
+                                ...textStyle,
+                            }}
+                        >
+                            {index + 1}. {teammate.name}
                         </Typography>
-                        {teammates.map((teammate, index) => (
-                            <Typography key={index} variant="h5"
-                                sx={{
-                                    fontWeight: teammate.name === logname ? "bold" : "",
-                                    color: teammate.stack > 0 ? "black" : "gray",
-                                    padding: "8px",
-                                    borderRadius: "6px",
-                                }}
-
-                            >
-                                {index + 1}. {teammate.name} - ${teammate.stack}
-                            </Typography>
-                        ))}
 
 
-                    </Stack>
-                </Paper>
-            </Container>
-        </Box>
+                        <Typography
+                            sx={{
+                                fontWeight: teammate.name === logname ? "bold" : "normal",
+                                color: teammate.stack > 0 ? "black" : "gray",
+                                textAlign: "right",
+                                padding: "0px 0px 0px 10px",
+                                ...textStyle,
+                            }}
+                        >
+                            ${teammate.stack.toLocaleString()}
+                        </Typography>
+                    </Box>
+                ))}
+            </Paper>
+        </Paper>
     );
 };
 
