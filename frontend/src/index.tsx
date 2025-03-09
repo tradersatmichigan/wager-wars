@@ -6,13 +6,16 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // Components (Import your components here)c
 import Root from "./Root";
 import LandingPage from "./control/LandingPage";
-import Control from "./control/Control"
+import { GameProvider } from "./control/GameContext";
 import CoinGame from "./control/CoinGame";
 import DiceGame from "./control/DiceGame";
 import CardGame from "./control/CardGame";
 import ControlResults from "./control/ControlResults";
 import Betting1 from "./client/betting1";
 import Betting2 from "./client/betting2";
+import Control from "./control/Control";
+import ControlBetting from "./control/Betting";
+import Simulate from "./control/Simulation";
 
 //const theme = createTheme({
 //  typography: {
@@ -50,6 +53,9 @@ import Betting2 from "./client/betting2";
 //  },
 //});
 
+
+// We may need to standardize the slashes, idt it matters but OCD
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -68,8 +74,16 @@ const router = createBrowserRouter([
         element: <Betting2/>
       },
       {
-        path: "/control/",
+        path: "control/",
         element: <Control />,
+      },
+      {
+        path: "control/betting",
+        element: <ControlBetting />
+      },
+      {
+        path: "control/simulate",
+        element: <Simulate />
       },
       {
         path: "/control/coingame",
@@ -95,12 +109,12 @@ const router = createBrowserRouter([
 //}
 );
 
+
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
-  {/*<ThemeProvider theme={theme}>*/}
-  {/*<CssBaseline />*/}
-  <RouterProvider router={router} />
-  {/*</ThemeProvider>*/}
-  </React.StrictMode>,
+    <GameProvider>
+      <RouterProvider router={router} />
+    </GameProvider>
+  </React.StrictMode>
 );

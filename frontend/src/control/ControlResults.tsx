@@ -8,22 +8,15 @@ import {
     Stack,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useGame } from "./GameContext";
 
-/* 
-
-Ts lowkey turning into a lot of pages but this should be the last one. I tried experimenting with children paths
-but I don't really understand them. It seems like if we set the endpoints using children paths, we can only add on to 
-what is already on the page, not replace the exising content. This coul be useful if we combine all the game 
-files into one page which would be the most efficient condensation of code.
-
-Also the UI of this page kinda ass but idk what to add
-
-*/
 
 function ControlResults() {
     const navigate = useNavigate();
+    const { roundNumber, setGameData } = useGame();
 
     const handleClick = () => {
+        setGameData(roundNumber + 1, "", "");
         navigate("/control");
     };
 
