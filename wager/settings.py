@@ -86,9 +86,23 @@ DATABASES = {
         "OPTIONS": {
             "passfile": ".pgpass",
         },
+        "POOL_OPTIONS": {
+            "POOL_SIZE": 20,
+            "MAX_OVERFLOW": 10,
+            "RECYCLE": 300,
+        }
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
