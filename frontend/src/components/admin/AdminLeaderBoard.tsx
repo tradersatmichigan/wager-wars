@@ -60,7 +60,7 @@ function AdminLeaderBoard({
 
     return (
       <Box className="admin-projection-panel" justifyContent={"center"} sx={{ display: "flex", flexDirection: "column", height: "100vh"}}>
-        <Box width={"70%"}>
+        <Box width={"60%"}>
             <Leaderboard />
             <Box display={"flex"} flexDirection="column" alignItems={"center"}>
             {isLastRound ? (
@@ -82,7 +82,7 @@ function AdminLeaderBoard({
                 className="next-round-button"
                 disabled={loading}
             >
-                {loading ? 'Continuing...' : 'Continue'}
+                {loading ? 'Continuing...' : 'Next Round'}
             </button>
             )}
             </Box>

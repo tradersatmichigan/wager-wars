@@ -59,7 +59,7 @@ function Leaderboard() {
             <th>Total Stack</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody style={{color: "black"}}>
           {leaderboard.teams.map((team, index) => (
             <tr 
               key={team.team_id} 

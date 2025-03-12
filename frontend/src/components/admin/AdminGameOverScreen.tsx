@@ -31,7 +31,7 @@ function AdminGameOverScreen({ gameState }: AdminGameOverScreenProps) {
           flexDirection="column" 
           alignItems="center" 
           sx={{
-            width: "70%",
+            width: "60%",
             backgroundColor: "#2d4a7c",
             borderRadius: "2rem"
           }}
@@ -42,10 +42,6 @@ function AdminGameOverScreen({ gameState }: AdminGameOverScreenProps) {
           </Box>
         </Box>
         
-        <Box className="admin-game-over-footer">
-          <p>The game has ended. Players are viewing the final results.</p>
-          <p className="admin-info">To start a new game, please visit the Django Admin Panel.</p>
-        </Box>
       </Box>
     </div>
   );

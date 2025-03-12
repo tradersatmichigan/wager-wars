@@ -49,15 +49,40 @@ function BettingForm({ gameState, phase }: BettingFormProps) {
   const handleClear = (): void => {
     setAmount(0);
   };
+
+  const odds = () => {
+    if (!gameState.multiplier) {
+      return;
+    }
+
+    if (Number.isInteger(gameState.multiplier)) {
+      return `${gameState.multiplier}:1`; // Whole numbers remain unchanged
+    }
+  
+    const precision = 1e9; // Precision to handle floating points
+    let numerator = Math.round(gameState.multiplier * precision);
+    let denominator = precision;
+  
+    // Greatest Common Divisor function (Euclidean Algorithm)
+    function gcd(a: number, b: number): number {
+      return b === 0 ? a : gcd(b, a % b);
+    }
+  
+    const divisor = gcd(numerator, denominator);
+    
+    // Simplify fraction
+    numerator /= divisor;
+    denominator /= divisor;
+  
+    return `${numerator}:${denominator}`;
+  }
   
   if (loading) return <div className="loading-container"><div className="loading-spinner"></div></div>;
   
   return (
     <div className="betting-form">
       <h2>{phase === 'initial' ? 'Initial Betting' : 'Final Betting'}</h2>
-      <p>Question: {gameState.question}</p>
-      <p>Probability: {(gameState.probability ? gameState.probability * 100 : 0).toFixed(1)}%</p>
-      <p>Multiplier: {gameState.multiplier}x</p>
+      <p>Odds -  {odds()}</p>
       
       <form onSubmit={handleSubmit}>
         <div className="form-group">

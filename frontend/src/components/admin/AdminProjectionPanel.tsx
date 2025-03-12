@@ -156,6 +156,33 @@ function AdminProjectionPanel() {
       loading={loading} 
     />;
   }
+
+  const odds = () => {
+    if (!gameState.multiplier) {
+      return;
+    }
+
+    if (Number.isInteger(gameState.multiplier)) {
+      return `${gameState.multiplier}:1`; // Whole numbers remain unchanged
+    }
+  
+    const precision = 1e9; // Precision to handle floating points
+    let numerator = Math.round(gameState.multiplier * precision);
+    let denominator = precision;
+  
+    // Greatest Common Divisor function (Euclidean Algorithm)
+    function gcd(a: number, b: number): number {
+      return b === 0 ? a : gcd(b, a % b);
+    }
+  
+    const divisor = gcd(numerator, denominator);
+    
+    // Simplify fraction
+    numerator /= divisor;
+    denominator /= divisor;
+  
+    return `${numerator}:${denominator}`;
+  }
   
   // Active round display (rest of the component remains the same)
   return (
@@ -187,15 +214,15 @@ function AdminProjectionPanel() {
             sx={{
               borderRadius: "2rem",
               backgroundColor:"#3772ff",
-              height: "20%",
+              height: "25%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              padding: "1rem"
+              padding: "1.5rem"
             }}
           >
             <Typography sx={{ fontSize: "2rem", fontWeight: "600", color: "white" }}>
-              Multiplier: {gameState.multiplier}x
+              Odds - {odds()}
             </Typography>
           </Paper>
 

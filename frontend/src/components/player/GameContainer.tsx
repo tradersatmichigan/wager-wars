@@ -133,6 +133,7 @@ function GameContainer() {
             <Box display={"flex"} flexDirection="column" alignItems={"center"} padding={"2rem 2rem"}>
               <Typography variant='h6' fontWeight={"bold"} color='var(--primary)'>Waiting for game to start...</Typography>
               <Typography variant='body1' fontWeight={"bold"} color='black'>We will begin shortly</Typography>
+              <Typography variant='h5' color='black'>You are on Team {gameState.team_id}</Typography>
             </Box>
           </Paper>
         </Box>
@@ -188,7 +189,6 @@ function GameContainer() {
       {gameState.current_phase === RoundPhaseEnum.INFORMATION && (
         <>
           <TeamBetsDisplay />
-          <Leaderboard />
         </>
       )}
       

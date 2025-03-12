@@ -5,7 +5,7 @@ import NavBar from '@/client/base';
 function PlayerPage() {
   return (
     <div className="player-page container">
-      <NavBar />
+      {/* <NavBar /> */}
       <GameContainer />
     </div>
   );

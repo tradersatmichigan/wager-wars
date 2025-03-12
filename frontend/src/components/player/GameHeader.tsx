@@ -24,7 +24,7 @@ function GameHeader({ roundNumber, question, phase, timeRemaining }: GameHeaderP
   return (
     <div className="game-header">
       <div className="player-round-info">
-        <h1>Round {roundNumber}: {question}</h1>
+        <h2>{question}</h2>
         <div className="phase-name">Phase: {phaseNames[phase]}</div>
       </div>
       

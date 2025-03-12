@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Leaderboard from '../common/Leaderboard';
 import TeamBetsResult from './TeamBetsResult';
 import TeamPerformanceGraph from './TeamPerformanceGraph';
 import type { TeamPerformanceData } from '../../types';
 import { fetchData } from '../../utils/fetch-utils';
+import { Box, Stack } from '@mui/material';
 
 interface ResultsDisplayProps {
   result?: boolean | null;
@@ -96,20 +96,17 @@ function ResultsDisplay({ result, roundCompleted }: ResultsDisplayProps) {
       )}
       
       {!loading && teamPerformance && (
-        <div className="team-results-grid">
+        <Box display={"flex"} flexDirection={"row"} alignItems={"center"} justifyContent={"center"}>
           {/* Team Round Results */}
-          <div style={{ width: '100%' }}>
-            <TeamBetsResult members={teamPerformance.team_members} />
-          </div>
-          
-          {/* Team Performance Graph */}
-          <div style={{ width: '100%' }}>
-            <TeamPerformanceGraph historicalData={teamPerformance.historical_data} />
-          </div>
-          
-          {/* Overall Leaderboard */}
-          <Leaderboard />
-        </div>
+            <Box margin={3}>
+              <TeamBetsResult members={teamPerformance.team_members} />
+            </Box>
+            
+            {/* Team Performance Graph */}
+            <Box margin={8}>
+              <TeamPerformanceGraph historicalData={teamPerformance.historical_data} />
+            </Box>
+        </Box>
       )}
     </div>
   );

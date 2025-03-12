@@ -53,7 +53,7 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
       const minStack = Math.min(0, Math.min(...stackValues) * 1.1);
       
       // Chart dimensions
-      const width = chartRef.current.clientWidth || 300; // Fallback width
+      const width = 500; // Fallback width
       const height = 200;
       const padding = { top: 20, right: 20, bottom: 30, left: 50 };
       
