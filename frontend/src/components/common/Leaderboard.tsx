@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import LoadingSpinner from '../common/LoadingSpinner';
+import LoadingSpinner from './LoadingSpinner';
 import type { LeaderboardResponse, GameState } from '../../types';
 import { fetchData } from '../../utils/fetch-utils';
 

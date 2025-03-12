@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchData, postData } from '../../utils/fetch-utils';
-import Leaderboard from '../player/Leaderboard';
+import Leaderboard from '../common/Leaderboard';
 import type { GameState, SimulationState } from '../../types';
 import { useNavigate } from 'react-router-dom';
 

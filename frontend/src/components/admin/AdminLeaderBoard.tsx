@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchData, postData } from '../../utils/fetch-utils';
-import Leaderboard from '../player/Leaderboard';
+import Leaderboard from '../common/Leaderboard';
 import type { GameState } from '../../types';
 
 import { Box, Typography, Paper, SvgIcon } from '@mui/material';

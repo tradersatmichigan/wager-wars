@@ -1,5 +1,5 @@
 import React from 'react';
-import Leaderboard from '../player/Leaderboard';
+import Leaderboard from '../common/Leaderboard';
 import type { GameState } from '../../types';
 import { Box, Typography } from '@mui/material';
 

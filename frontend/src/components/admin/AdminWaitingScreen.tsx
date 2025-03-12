@@ -1,5 +1,6 @@
 import React from "react";
-import { Typography, Box, Paper, Grid, ListItem, List, ListItemText, Container, Stack } from "@mui/material";
+import { Typography, Box, ListItem, List, ListItemText, Stack } from "@mui/material";
+import Instructions from "../common/Intructions";
 
 interface AdminWaitingScreenProps {
   startRound: () => Promise<void>;
@@ -42,22 +43,22 @@ function AdminWaitingScreen({
                 </div>
                 <List>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="Players will break up into teams of XXXX and each player will be given a starting pool of $XXXX." />
+                    <ListItemText sx={{ color: "white"}} primary="Players will be assigned into teams of 8, and each player will recieve $10,000 to start." />
                   </ListItem>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="There will be XX rounds of play; during each round, players will be asked a question (e.g., 'How much are you willing to bet this coin lands on heads?')." />
+                    <ListItemText sx={{ color: "white"}} primary="There will be 15 rounds of play. During each round, players will be asked a question (e.g. 'How much are you willing to bet this coin lands on heads?'). Each question will have a different EV and a different risk to reward ratio." />
                   </ListItem>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="You will have time to discuss with your teammates and place a bet that works for you." />
+                    <ListItemText sx={{ color: "white"}} primary="You will be given 30 seconds to decide on how much you are willing to risk on the event. Feel free to dicuss with your team to come up with collective strategy." />
                   </ListItem>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="Halfway through the betting period, you'll get to see the average bets of the opposing teams and adjust your own bets accordingly." />
+                    <ListItemText sx={{ color: "white"}} primary="Betting will then be paused and you will have 30 seconds to see all the bets being placed by other teams. After this period, you will have a final 30 seconds to change your bet." />
                   </ListItem>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="At the end of each round, depending on the actual outcome of the coin toss, you will either be rewarded with your bet being multiplied or lose your bet entirely." />
+                    <ListItemText sx={{ color: "white"}} primary="At the end of each round, depending on the actual outcome of the coin toss (or some other event), you will either be rewarded with your bet being multiplied or lose your bet entirely." />
                   </ListItem>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="The team with the largest collective pool at the end of XX rounds wins!" />
+                    <ListItemText sx={{ color: "white"}} primary="At the end of the 15 rounds, the team with the largest collective cash pool wins!" />
                   </ListItem>
                 </List>
               </Box>
@@ -75,7 +76,7 @@ function AdminWaitingScreen({
                 margin="auto" // Centers the box itself if necessary
                 textAlign="center" // Ensures text alignment inside
               >
-                <div className="next-round-info">
+                {/* <div className="next-round-info">
                   Next: Round {nextRoundNumber}
                 </div>
                 
@@ -83,7 +84,7 @@ function AdminWaitingScreen({
                   <div className="waiting-dot"></div>
                   <div className="waiting-dot"></div>
                   <div className="waiting-dot"></div>
-                </div>
+                </div> */}
                 
                 <button 
                   onClick={startRound} 

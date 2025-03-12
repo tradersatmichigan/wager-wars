@@ -5,12 +5,15 @@ import PlayerInfo from './PlayerInfo';
 import BettingForm from './BettingForm';
 import TeamBetsDisplay from './TeamBetsDisplay';
 import ResultsDisplay from './ResultsDisplay';
-import Leaderboard from './Leaderboard';
+import Leaderboard from '../common/Leaderboard';
 import LoadingSpinner from '../common/LoadingSpinner';
 import GameOverScreen from './GameOverScreen';
 
+import { Box, Paper, Typography } from '@mui/material';
+
 import { type GameState, RoundPhaseEnum } from '../../types';
 import { fetchData } from '../../utils/fetch-utils';
+import Instructions from '../common/Intructions';
 
 function GameContainer() {
   const [gameState, setGameState] = useState<GameState | null>(null);
@@ -118,13 +121,21 @@ function GameContainer() {
   if (gameState.waiting_for_first_round) {
     return (
       <div className="game-container">
-        <div className="waiting-state">
-          <h2>Waiting for the next round to begin</h2>
-          <p>The admin will start the round shortly.</p>
-        </div>
-
-        <PlayerInfo currentStack={gameState.current_stack} />
-        <Leaderboard />
+        <Box display={"flex"} flexDirection="column" alignItems={"center"} width={"100%"} mt={3}>
+          
+          <Paper elevation={4} sx={{width: "90%"}}>
+            <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
+              <Typography variant="h3" gutterBottom mt={3}>
+                Welcome to Wager Wars!
+              </Typography>
+            </Box>
+            <Instructions />
+            <Box display={"flex"} flexDirection="column" alignItems={"center"} padding={"2rem 2rem"}>
+              <Typography variant='h6' fontWeight={"bold"} color='var(--primary)'>Waiting for game to start...</Typography>
+              <Typography variant='body1' fontWeight={"bold"} color='black'>We will begin shortly</Typography>
+            </Box>
+          </Paper>
+        </Box>
       </div>
     );
   }
