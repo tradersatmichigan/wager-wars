@@ -95,3 +95,5 @@ export interface CurrentBetResponse {
     amount: number;
   } | null;
 }
+
+export type SimulationState = 'idle' | 'running' | 'suspense' | 'revealed' | 'result';

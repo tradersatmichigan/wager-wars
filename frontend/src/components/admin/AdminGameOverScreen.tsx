@@ -1,6 +1,7 @@
 import React from 'react';
 import Leaderboard from '../player/Leaderboard';
 import type { GameState } from '../../types';
+import { Box, Typography } from '@mui/material';
 
 interface AdminGameOverScreenProps {
   gameState: GameState;
@@ -9,28 +10,43 @@ interface AdminGameOverScreenProps {
 function AdminGameOverScreen({ gameState }: AdminGameOverScreenProps) {
   return (
     <div className="admin-projection-panel">
-      {/* Header */}
-      <div className="admin-header">
-        <h1>Trading Competition</h1>
-        <div className="admin-controls-badge">ADMIN CONTROLS</div>
-      </div>
       
-      <div className="admin-game-over">
-        <div className="admin-game-over-header">
-          <h2>Game Completed!</h2>
-          <p>All {gameState.rounds_completed} rounds have been completed.</p>
-        </div>
+      <Box display={"flex"} flexDirection="column" alignItems={"center"} width={"100%"} mt={2} mb={2}>
+        <Typography 
+          variant="h3" 
+          fontWeight={"bold"}
+        >
+          Game Completed!
+        </Typography>
+        <Typography 
+          variant='h5' 
+          color='#ffce44'
+          mb={5}
+        >
+          All {gameState.rounds_completed} rounds have been completed.
+        </Typography>
         
-        <div className="admin-final-results">
-          <h3>Final Standings</h3>
-          <Leaderboard />
-        </div>
+        <Box 
+          display="flex" 
+          flexDirection="column" 
+          alignItems="center" 
+          sx={{
+            width: "70%",
+            backgroundColor: "#2d4a7c",
+            borderRadius: "2rem"
+          }}
+        >
+          <Typography variant='h4' fontWeight={"bold"} mt={2} mb={2}>Final Standings</Typography>
+          <Box width={"90%"}>
+            <Leaderboard />
+          </Box>
+        </Box>
         
-        <div className="admin-game-over-footer">
+        <Box className="admin-game-over-footer">
           <p>The game has ended. Players are viewing the final results.</p>
           <p className="admin-info">To start a new game, please visit the Django Admin Panel.</p>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </div>
   );
 }

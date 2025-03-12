@@ -5,18 +5,23 @@ import AdminWaitingScreen from './AdminWaitingScreen';
 import AdminSimulationRunningScreen from './AdminSimulationRunningScreen';
 import AdminSuspenseRevealScreen from './AdminSuspenseRevealScreen';
 import AdminResultScreen from './AdminResultScreen';
+import AdminLeaderBoard from './AdminLeaderBoard';
 import AdminGameOverScreen from './AdminGameOverScreen';
 
-import { type GameState, RoundPhaseEnum } from '../../types';
+import { type GameState, RoundPhaseEnum, type SimulationState} from '../../types';
 import { fetchData, postData } from '../../utils/fetch-utils';
 
-type SimulationState = 'idle' | 'running' | 'suspense' | 'revealed';
+import { Paper, Typography, Stack, Box } from '@mui/material';
+
+//type SimulationState = 'idle' | 'running' | 'suspense' | 'revealed' | 'result';
 
 function AdminProjectionPanel() {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [simulationState, setSimulationState] = useState<SimulationState>('idle');
   const [simulationResult, setSimulationResult] = useState<boolean | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [test, setTest] = useState(true);
   
   // Poll for game state
   useEffect(() => {
@@ -58,6 +63,7 @@ function AdminProjectionPanel() {
   };
   
   const simulateRound = async (): Promise<void> => {
+    setTest(true);
     if (simulationState !== 'idle') return;
     
     // Start simulation animation
@@ -81,11 +87,16 @@ function AdminProjectionPanel() {
           console.error('Error simulating round:', error);
           setSimulationState('idle');
         }
+
+        setTimeout(async () => {
+          setSimulationState('result');
+        }, 5000);
+
       }, 3000); // Suspense animation duration
       
     }, 4000); // Simulation running animation duration
   };
-  
+
   if (!gameState) return <AdminLoadingScreen />;
   
   // Handle game completed state - NEW SECTION
@@ -94,6 +105,12 @@ function AdminProjectionPanel() {
     return <AdminGameOverScreen gameState={gameState} />;
   }
   
+  // if (test) {
+  //   return (
+  //   <AdminSuspenseRevealScreen roundInfo={gameState}/>
+  //   );
+  // }
+
   // Handle simulation states
   if (simulationState === 'running') {
     return <AdminSimulationRunningScreen roundInfo={gameState} />;
@@ -108,8 +125,17 @@ function AdminProjectionPanel() {
       <AdminResultScreen 
         gameState={gameState} 
         result={simulationResult}
-        startNextRound={startNextRound} 
         loading={loading} 
+      />
+    );
+  }
+
+  if (simulationState === 'result') {
+    return (
+      <AdminLeaderBoard 
+        gameState={gameState}
+        startNextRound={startNextRound}
+        loading={loading}
       />
     );
   }
@@ -134,47 +160,85 @@ function AdminProjectionPanel() {
   // Active round display (rest of the component remains the same)
   return (
     <div className="admin-projection-panel">
-      {/* Header */}
-      <div className="admin-header">
-        <h1>Trading Competition</h1>
-        <div className="admin-controls-badge">ADMIN CONTROLS</div>
-      </div>
       
       {/* Round Information */}
       <div className="admin-round-info">
-        <h2>Round {gameState.round_number}</h2>
-        <h3>{gameState.question}</h3>
-        
-        <div className="round-details">
-          <div className="probability-badge">Prob: {(gameState.probability ? gameState.probability * 100 : 0).toFixed(0)}%</div>
-          <div className="multiplier-badge">Mult: {gameState.multiplier}x</div>
-        </div>
+        <Paper elevation={0} sx={{ backgroundColor: "#2d4a7c", borderRadius: "0.75rem"}}>
+          <Typography sx={{fontSize: "2.75rem", p: "0.5rem", margin: "0.5rem", fontWeight: "bold", color: "white"}}>
+            Round {gameState.round_number}
+          </Typography>
+        </Paper>
+        <Box>
+          <h3>{gameState.question}</h3>
+        </Box>
       </div>
       
-      {/* Timer Display */}
-      <div className={`timer-display phase-${gameState.current_phase}`}>
-        <div className="timer-circle">
-          <div className="timer-value">
-            {Math.floor((gameState.time_remaining || 0) / 60)}:{Math.floor((gameState.time_remaining || 0) % 60).toString().padStart(2, '0')}
-          </div>
-        </div>
-        <div className="admin-phase-label">
-          {gameState.current_phase === 0 ? 'Initial Betting Phase' :
-           gameState.current_phase === 1 ? 'Information Phase' :
-           gameState.current_phase === 2 ? 'Final Betting Phase' : 'Results Phase'}
-        </div>
-        
-        {gameState.current_phase === 1 && (
-          <div className="phase-instruction">Discuss with your teammates!</div>
-        )}
-        {gameState.current_phase === 3 && (
-          <div className="phase-instruction">Ready to run simulation!</div>
-        )}
-      </div>
+      <Box display="flex" justifyContent="center" width="100%" mt={15} mb={15}>
+        <Stack 
+          direction="row" 
+          alignItems="center" 
+          justifyContent="space-between" // Ensures left & right elements move, timer stays fixed
+          width="70%" // Adjust based on layout needs
+          position="relative" // Required for absolute centering of timer
+        >
+          {/* Left Element (Multiplier) */}
+          <Paper 
+            elevation={0}
+            sx={{
+              borderRadius: "2rem",
+              backgroundColor:"#3772ff",
+              height: "20%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "1rem"
+            }}
+          >
+            <Typography sx={{ fontSize: "2rem", fontWeight: "600", color: "white" }}>
+              Multiplier: {gameState.multiplier}x
+            </Typography>
+          </Paper>
+
+          {/* Centered Timer - Absolutely Positioned */}
+          <Box 
+            sx={{ 
+              position: "absolute", 
+              left: "50%", 
+              transform: "translateX(-50%)" // Ensures it stays perfectly centered
+            }}
+          >
+            <div className={`timer-display phase-${gameState.current_phase}`}>
+              <div className="timer-circle">
+                <div className="timer-value">
+                  {Math.floor((gameState.time_remaining || 0) / 60)}:
+                  {Math.floor((gameState.time_remaining || 0) % 60).toString().padStart(2, '0')}
+                </div>
+              </div>
+            </div>
+          </Box>
+
+          {/* Right Element (Phase Information) */}
+          <Stack alignItems="center">
+            <div className="admin-phase-label">
+              {gameState.current_phase === 0 ? 'Initial Betting Phase' :
+                gameState.current_phase === 1 ? 'Information Phase' :
+                gameState.current_phase === 2 ? 'Final Betting Phase' : 'Results Phase'}
+            </div>
+            {gameState.current_phase === 1 && (
+              <div className="phase-instruction">Discuss with your teammates!</div>
+            )}
+            {gameState.current_phase === 3 && (
+              <div className="phase-instruction">Ready to run simulation!</div>
+            )}
+          </Stack>
+        </Stack>
+      </Box>
+
+      
       
       {/* Phase Indicators */}
       <div className="phase-indicators">
-        <div className={`phase-step ${gameState.current_phase && gameState.current_phase >= 0 ? 'active' : ''} ${gameState.current_phase && gameState.current_phase > 0 ? 'completed' : ''}`}>
+        <div className={`phase-step ${gameState.current_phase && gameState.current_phase > 0 ? 'completed' : 'active'}`}>
           <div className="phase-dot">
             {gameState.current_phase && gameState.current_phase > 0 ? '✓' : '1'}
           </div>
@@ -198,14 +262,16 @@ function AdminProjectionPanel() {
       
       {/* Admin Control Buttons */}
       <div className="admin-actions">
-        {gameState.current_phase === RoundPhaseEnum.RESULTS ? (
-          <button 
-            className="admin-button simulate-button" 
-            disabled={loading}
-            onClick={simulateRound}
-          >
-            Run Simulation
-          </button>
+        {gameState.time_remaining === 0 ? (
+          gameState.current_phase === RoundPhaseEnum.RESULTS && (
+            <button 
+              className="admin-button simulate-button" 
+              disabled={loading}
+              onClick={simulateRound}
+            >
+              Run Simulation
+            </button>
+          )
         ) : (
           <button 
             className="admin-button start-button" 

@@ -195,3 +195,5 @@ yarn-debug.log*
 yarn-error.log*
 
 static/js/
+
+dump.rdb

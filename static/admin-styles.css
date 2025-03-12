@@ -12,20 +12,22 @@
   margin: 0;
 }
 
-.admin-header {
+.admin-title-box {
   width: 100%;
   background-color: #2d4a7c;
   padding: 1rem 2rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
-.admin-header h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin: 0;
+.instruction-box {
+  background-color: #2d4a7c;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  width: 100%;
 }
+
 
 .admin-controls-badge {
   background-color: #f44336;
@@ -38,22 +40,21 @@
 
 /* Admin Round Info - renamed from round-info to avoid conflicts */
 .admin-round-info {
-  padding: 2rem 0;
   text-align: center;
   width: 80%;
 }
 
-.admin-round-info h2 {
+/* .admin-round-info h2 {
   font-size: 2.75rem;
+  padding: 1rem;
   margin-bottom: 0.5rem;
-  color: white;
-}
+  color: black;
+} */
 
 .admin-round-info h3 {
   font-size: 2.25rem;
-  margin-bottom: 1.5rem;
   font-weight: 500;
-  color: white;
+  color:#ffce44;
 }
 
 .round-details {
@@ -135,7 +136,7 @@
   justify-content: space-between;
   width: 80%;
   position: relative;
-  margin: 3rem 0;
+  margin: 1rem 0;
 }
 
 .phase-indicators::before {
@@ -200,7 +201,6 @@
   padding: 2rem;
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
 }
 
 .admin-button {
@@ -294,13 +294,14 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  width: 100%;
   text-align: center;
 }
 
 .waiting-title {
   font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .waiting-subtitle {
@@ -354,7 +355,6 @@
 .admin-help-text {
   font-size: 1.1rem;
   color: #6b7280;
-  margin-top: 1.5rem;
 }
 
 /* Admin Loading Screen */
@@ -401,7 +401,7 @@
   width: 100%;
   height: 100%;
   z-index: 0;
-  opacity: 0.15;
+  opacity: 1;
 }
 
 @keyframes binary-float {
@@ -454,16 +454,18 @@
 }
 
 .rotating-arc {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 1rem solid transparent;
-  border-top-color: #ffce44;
-  animation: rotate 2s linear infinite;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 80% !important;
+  height: 80% !important;
+  border-radius: 50% !important;
+  border: 1rem solid transparent !important;
+  border-top-color: #ffce44 !important;
+  transform: translate(-50%, -50%) rotate(0deg) !important;
+  animation: rotate 2s linear infinite !important;
 }
+
 
 @keyframes rotate {
   0% { transform: rotate(0deg); }
@@ -490,33 +492,6 @@
   animation: pulse 2s infinite;
 }
 
-.market-graph-animation {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 8rem;
-  overflow: hidden;
-  opacity: 0.5;
-}
-
-.market-graph-animation::before {
-  content: "";
-  position: absolute;
-  bottom: 50%;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(to right, transparent 0%, #3772ff 100%);
-  animation: graph-move 5s infinite alternate;
-}
-
-@keyframes graph-move {
-  0% { transform: translateY(0) scaleY(1); }
-  50% { transform: translateY(20px) scaleY(0.8); }
-  100% { transform: translateY(-20px) scaleY(1.2); }
-}
-
 /* Suspense Reveal Animation */
 .reveal-container {
   display: flex;
@@ -528,7 +503,7 @@
 
 .question-mark-circle {
   width: 20rem;
-  height: 20rem;
+  height: 0rem;
   border-radius: 50%;
   background-color: #2d4a7c;
   border: 0.6rem solid #ffce44;
@@ -596,7 +571,7 @@
 /* Admin Game End/Over styles */
 .game-over-title {
   font-size: 2.5rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
   color: white;
 }
 
@@ -650,7 +625,7 @@
 
 .admin-final-results {
   width: 80%;
-  max-width: 800px;
+  max-width: 1000px;
   background-color: #2d4a7c;
   border-radius: 12px;
   padding: 2rem;
@@ -690,7 +665,7 @@
   font-weight: 600;
   border: none;
   cursor: pointer;
-  margin-top: 2rem;
+  margin-top: 1rem;
   transition: all 0.2s ease;
 }
 

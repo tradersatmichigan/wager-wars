@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { GameState } from '../../types';
+import { Box, Paper, Typography, keyframes } from '@mui/material';
 
 interface AdminSuspenseRevealScreenProps {
   roundInfo: GameState;
@@ -24,40 +25,61 @@ function AdminSuspenseRevealScreen({ roundInfo }: AdminSuspenseRevealScreenProps
     
     return () => clearInterval(timer);
   }, []);
+
+  const circlePulse = keyframes`
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+`;
   
   return (
     <div className="admin-projection-panel">
       {/* Header */}
-      <div className="admin-header">
-        <h1>Trading Competition</h1>
-        <div className="admin-controls-badge">ADMIN CONTROLS</div>
-      </div>
       
       {/* Round Information */}
-      <div className="admin-round-info">
-        <h2>Round {roundInfo.round_number}</h2>
-        <h3>{roundInfo.question}</h3>
-        
-        <div className="round-details">
-          <div className="probability-badge">Prob: {(roundInfo.probability ? roundInfo.probability * 100 : 0).toFixed(0)}%</div>
-          <div className="multiplier-badge">Mult: {roundInfo.multiplier}x</div>
-        </div>
-      </div>
+      <Box className="admin-projection-panel" sx={{ display: "flex", flexDirection: "column", height: "100vh"}}>
       
+      {/* Round Information - FIXED AT THE TOP */}
+      <Box sx={{ flexShrink: 0, textAlign: "center", p: 2, width: "80%"}}>
+        <Paper elevation={0} sx={{ backgroundColor: "#2d4a7c", borderRadius: "0.75rem", p: 2 }}>
+          <Typography sx={{ fontSize: "2.75rem", fontWeight: "bold", color: "white" }}>
+            Round {roundInfo.round_number}
+          </Typography>
+        </Paper>
+      </Box>
       {/* Result Reveal Animation */}
-      <div className="reveal-container">
-        <div className="question-mark-circle">
-          <div className="question-mark">?</div>
-        </div>
-        
-        <div className="countdown-text">
+      <Box
+      sx={{
+        width: "20rem", // Ensure equal width & height
+        height: "20rem",
+        borderRadius: "50%", // Makes it a perfect circle
+        backgroundColor: "#2d4a7c",
+        border: "0.6rem solid #ffce44",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        animation: `${circlePulse} 0.5s ease-in-out infinite alternate`,
+        flexShrink: 0, // Prevents flexbox from distorting it
+        aspectRatio: "1 / 1", // Ensures it stays round in all cases
+        marginTop: "5rem"
+      }}
+    >
+      <Typography
+        sx={{
+          fontSize: "10rem", // Adjust size as needed
+          fontWeight: "bold",
+          color: "white",
+          animation: "mark-flash 0.5s ease-in-out infinite alternate",
+        }}
+      >
+        ?
+      </Typography>
+    </Box>
+      <div className="countdown-text">
           Revealing result in {countdown}...
         </div>
-        
-        <div className="heartbeat-visualization">
-          {/* Heartbeat animation - implemented in CSS */}
-        </div>
-      </div>
+      </Box>
+      
+      
     </div>
   );
 }
