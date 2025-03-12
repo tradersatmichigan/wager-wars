@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Leaderboard from './Leaderboard';
+import Leaderboard from '../common/Leaderboard';
 import TeamBetsResult from './TeamBetsResult';
 import TeamPerformanceGraph from './TeamPerformanceGraph';
 import type { TeamPerformanceData } from '../../types';
