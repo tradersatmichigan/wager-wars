@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import AdminLoadingScreen from './AdminLoadingScreen';
 import AdminWaitingScreen from './AdminWaitingScreen';
@@ -12,33 +12,79 @@ import { type GameState, RoundPhaseEnum, type SimulationState} from '../../types
 import { fetchData, postData } from '../../utils/fetch-utils';
 
 import { Paper, Typography, Stack, Box } from '@mui/material';
-import NewGameOverScreen from './AnnaAdminGameOverScreen';
 
-//type SimulationState = 'idle' | 'running' | 'suspense' | 'revealed' | 'result';
+function hasPhaseChanged(prev: GameState | null, next: GameState): boolean {
+  if (!prev) return true;
+  return (
+    prev.current_phase !== next.current_phase ||
+    prev.round_id !== next.round_id
+  );
+}
 
 function AdminProjectionPanel() {
   const [gameState, setGameState] = useState<GameState | null>(null);
+  const [localTimer, setLocalTimer] = useState<number>(30);
   const [simulationState, setSimulationState] = useState<SimulationState>('idle');
   const [simulationResult, setSimulationResult] = useState<boolean | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [test, setTest] = useState(true);
+  const gameStateRef = useRef(gameState);
+  const localTimerRef = useRef(localTimer);
+  const pollCounterRef = useRef<number>(0);
+
+  useEffect(() => {
+    gameStateRef.current = gameState;
+  }, [gameState]);
+
+  useEffect(() => {
+    localTimerRef.current = localTimer;
+  }, [localTimer]);
   
   // Poll for game state
   useEffect(() => {
-    const fetchGameState = async (): Promise<void> => {
-      try {
-        const data = await fetchData<GameState>('/api/game/state/');
-        console.log('Game state:', data); // Add this to debug
-        setGameState(data);
-      } catch (error) {
-        console.error('Error fetching game state:', error);
+    const intervalId = setInterval(async () => {
+      // When no game state exists or we're still waiting for the first round,
+      // poll every 3 seconds.
+      if (!gameStateRef.current || gameStateRef.current.waiting_for_first_round) {
+        pollCounterRef.current++;
+        if (pollCounterRef.current >= 3) {
+          try {
+            const data = await fetchData<GameState>('/api/game/state/');
+            console.log('polling');
+            // On the very first poll or when waiting, sync the timer.
+            if (hasPhaseChanged(gameStateRef.current, data) && data.time_remaining !== undefined) {
+              setLocalTimer(Math.floor(data.time_remaining));
+            }
+            setGameState(data);
+          } catch (error) {
+            console.error('Error fetching game state:', error);
+          }
+          pollCounterRef.current = 0;
+        }
+        return; // Exit early so we don't run the countdown below.
       }
-    };
-    
-    fetchGameState();
-    const interval = setInterval(fetchGameState, 1000); // Poll every second for accurate timer
-    return () => clearInterval(interval);
+
+      // Active round: decrement the local timer every second.
+      setLocalTimer(prev => Math.max(prev - 1, 0));
+
+      // When the timer is in the last 3 seconds, poll every second.
+      if (localTimerRef.current <= 3) {
+        try {
+          const data = await fetchData<GameState>('/api/game/state/');
+          console.log('polling');
+          // If a new phase/round is detected, sync the timer.
+          if (hasPhaseChanged(gameStateRef.current, data) && data.time_remaining !== undefined) {
+            setLocalTimer(Math.floor(data.time_remaining));
+          }
+          setGameState(data);
+        } catch (error) {
+          console.error('Error fetching game state:', error);
+        }
+      }
+    }, 1000); // Tick every second
+
+    return () => clearInterval(intervalId);
   }, []);
   
   // Reset simulation state when round changes
@@ -83,6 +129,7 @@ function AdminProjectionPanel() {
           
           // Refresh game state after simulation
           const gameData = await fetchData<GameState>('/api/game/state/');
+          console.log('polling');
           setGameState(gameData);
         } catch (error: any) {
           console.error('Error simulating round:', error);
@@ -238,8 +285,8 @@ function AdminProjectionPanel() {
             <div className={`timer-display phase-${gameState.current_phase}`}>
               <div className="timer-circle">
                 <div className="timer-value">
-                  {Math.floor((gameState.time_remaining || 0) / 60)}:
-                  {Math.floor((gameState.time_remaining || 0) % 60).toString().padStart(2, '0')}
+                  {Math.floor(localTimer / 60)}:
+                  {Math.floor(localTimer % 60).toString().padStart(2, '0')}
                 </div>
               </div>
             </div>
