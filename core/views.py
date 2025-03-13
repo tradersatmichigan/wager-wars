@@ -79,7 +79,7 @@ def game_state(request: HttpRequest):
             'status': 'active',
             'server_timestamp': timezone.now().timestamp(),
             'current_round_number': game.current_round_number,
-            'team_name': request.user.player.team.name
+            'team_name': request.user.player.team.name if request.user.player.team else ""
         }
         
         # Check if game is currently in an active round
@@ -194,7 +194,7 @@ def game_state(request: HttpRequest):
                     })
         
         # Cache the shared state for 2 seconds
-        cache.set(shared_cache_key, shared_data, 2)
+        cache.set(shared_cache_key, shared_data, 4)
     
     # Now add player-specific data
     response_data = shared_data.copy()
@@ -459,7 +459,7 @@ def team_performance(request: HttpRequest):
         
         if bet and latest_round.result:
             # Won bet
-            profit = bet_amount * (latest_round.multiplier - 1)
+            profit = bet_amount * latest_round.multiplier
             result = 'won'
         elif bet:
             # Lost bet
@@ -488,7 +488,13 @@ def team_performance(request: HttpRequest):
     # Calculate team stack after each round
     historical_data = []
     team_stack = sum(float(member.starting_stack) for member in team_members)
-    
+
+    historical_data.append({
+        'round_number': 0,
+        'team_stack': team_stack,
+        'profit': 0
+    })   
+
     for round_obj in completed_rounds:
         # Get team bets for this round
         round_bets = Bet.objects.filter(
@@ -501,7 +507,7 @@ def team_performance(request: HttpRequest):
         for bet in round_bets:
             if round_obj.result:
                 # Won bet
-                round_profit += float(bet.amount) * (round_obj.multiplier - 1)
+                round_profit += float(bet.amount) * (round_obj.multiplier)
             else:
                 # Lost bet
                 round_profit -= float(bet.amount)
@@ -682,8 +688,7 @@ def simulate_round(request: HttpRequest):
             
             # All bets are on success, so players win if the result is success
             if success:
-                winnings = bet.amount * Decimal(str(current_round.multiplier))
-                player.current_stack += winnings - bet.amount
+                player.current_stack += bet.amount * Decimal(str(current_round.multiplier))
             else:
                 player.current_stack -= bet.amount
             

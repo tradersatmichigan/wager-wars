@@ -1,4 +1,3 @@
-import { Widgets } from '@mui/icons-material';
 import React, { useState, useEffect } from 'react';
 
 interface PlayerInfoProps {
@@ -32,6 +31,7 @@ function PlayerInfo({ currentStack, teamName }: PlayerInfoProps) {
         
         if (data.success) {
           setTeamStack(data.stack);
+          console.log(data.stack);
         } else {
           console.error('Failed to fetch team stack:', data.error);
         }

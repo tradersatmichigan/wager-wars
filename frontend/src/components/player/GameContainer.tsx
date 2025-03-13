@@ -5,7 +5,6 @@ import PlayerInfo from './PlayerInfo';
 import BettingForm from './BettingForm';
 import TeamBetsDisplay from './TeamBetsDisplay';
 import ResultsDisplay from './ResultsDisplay';
-import Leaderboard from '../common/Leaderboard';
 import LoadingSpinner from '../common/LoadingSpinner';
 import GameOverScreen from './GameOverScreen';
 
@@ -133,7 +132,7 @@ function GameContainer() {
             <Box display={"flex"} flexDirection="column" alignItems={"center"} padding={"2rem 2rem"}>
               <Typography variant='h6' fontWeight={"bold"} color='var(--primary)'>Waiting for game to start...</Typography>
               <Typography variant='body1' fontWeight={"bold"} color='black'>We will begin shortly</Typography>
-              <Typography mt={3} variant='h5' color='black'>You are on Team {gameState.team_id}</Typography>
+              <Typography mt={3} variant='h5' color='black'>Your Team: {gameState.team_name ? gameState.team_name : "?"}</Typography>
             </Box>
           </Paper>
         </Box>

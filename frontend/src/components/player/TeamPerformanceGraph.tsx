@@ -10,11 +10,6 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
   const chartRef = useRef<HTMLDivElement>(null);
   const initialTeamStack = 3000
 
-  const trueHistoricalData = [
-    { round_number: 0, team_stack: initialTeamStack, profit: 0 },
-    ...historicalData
-  ];
-  
   console.log("TeamPerformanceGraph rendering with data:", historicalData);
   
   useEffect(() => {
@@ -48,7 +43,7 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
     
     try {
       // Find min and max values for scaling
-      const stackValues = trueHistoricalData.map(d => d.team_stack);
+      const stackValues = historicalData.map(d => d.team_stack);
       const maxStack = Math.max(...stackValues) * 1.1; // Add 10% margin
       const minStack = Math.min(0, Math.min(...stackValues) * 1.1);
       
@@ -72,7 +67,7 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
       
       // Scale functions
       const xScale = (index: number): number => {
-        return padding.left + (index / (trueHistoricalData.length - 1)) * (width - padding.left - padding.right);
+        return padding.left + (index / (historicalData.length - 1)) * (width - padding.left - padding.right);
       };
       
       const yScale = (value: number): number => {
@@ -99,7 +94,7 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
       svg.appendChild(yAxis);
       
       // X-axis labels (rounds)
-      trueHistoricalData.forEach((data, index) => {
+      historicalData.forEach((data, index) => {
         const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         label.setAttribute('x', xScale(index).toString());
         label.setAttribute('y', (height - padding.bottom + 15).toString());
@@ -137,7 +132,7 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
       
       // Create the line path
       let pathData = '';
-      trueHistoricalData.forEach((data, index) => {
+      historicalData.forEach((data, index) => {
         const x = xScale(index);
         const y = yScale(data.team_stack);
         if (index === 0) {
@@ -155,7 +150,7 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
       svg.appendChild(path);
       
       // Add data points
-      trueHistoricalData.forEach((data, index) => {
+      historicalData.forEach((data, index) => {
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.setAttribute('cx', xScale(index).toString());
         circle.setAttribute('cy', yScale(data.team_stack).toString());
@@ -213,7 +208,7 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
         chartRef.current.appendChild(errorMsg);
       }
     }
-  }, [trueHistoricalData]);
+  }, [historicalData]);
   
   // Use inline styles to ensure visibility
   const containerStyle = {
