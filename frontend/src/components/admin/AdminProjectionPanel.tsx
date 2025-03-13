@@ -12,6 +12,7 @@ import { type GameState, RoundPhaseEnum, type SimulationState} from '../../types
 import { fetchData, postData } from '../../utils/fetch-utils';
 
 import { Paper, Typography, Stack, Box } from '@mui/material';
+import NewGameOverScreen from './AnnaAdminGameOverScreen';
 
 //type SimulationState = 'idle' | 'running' | 'suspense' | 'revealed' | 'result';
 
@@ -102,7 +103,7 @@ function AdminProjectionPanel() {
   // Handle game completed state - NEW SECTION
   if (gameState.game_completed) {
     console.log('Game completed state detected in AdminProjectionPanel');
-    return <AdminGameOverScreen gameState={gameState} />;
+    return <AdminGameOverScreen />;
   }
   
   // if (test) {

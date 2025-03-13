@@ -2,27 +2,21 @@ import React, { useState, useEffect } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import type { LeaderboardResponse, GameState } from '../../types';
 import { fetchData } from '../../utils/fetch-utils';
+import {
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 
 function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [playerTeamId, setPlayerTeamId] = useState<number | null>(null);
-  
-  // Get player's team ID when component mounts
-  useEffect(() => {
-    const fetchPlayerInfo = async (): Promise<void> => {
-      try {
-        const data = await fetchData<GameState>('/api/game/state/');
-        if (data.team_id) {
-          setPlayerTeamId(data.team_id);
-        }
-      } catch (error) {
-        console.error('Error fetching player info:', error);
-      }
-    };
-    
-    fetchPlayerInfo();
-  }, []);
   
   useEffect(() => {
     const fetchLeaderboard = async (): Promise<void> => {
@@ -38,41 +32,56 @@ function Leaderboard() {
     };
     
     fetchLeaderboard();
-    
-    // Refresh every 10 seconds
-    const interval = setInterval(fetchLeaderboard, 10000);
-    return () => clearInterval(interval);
   }, []);
   
   if (loading && !leaderboard) return <LoadingSpinner />;
   if (!leaderboard) return null;
-  
+
   return (
-    <div className="leaderboard">
-      <h2 style={{textAlign: "center"}}>Team Leaderboard</h2>
-      
-      <table>
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Team</th>
-            <th>Average Stack</th>
-          </tr>
-        </thead>
-        <tbody style={{color: "black"}}>
-          {leaderboard.teams.map((team, index) => (
-            <tr 
-              key={team.team_id} 
-              className={team.team_id === playerTeamId ? 'player-team' : ''}
-            >
-              <td>{index + 1}</td>
-              <td>{team.team_name}</td>
-              <td>${team.avg_stack.toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Box sx={{ width: "30%", mx: "auto" }}>
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        mb={2}
+        textAlign="center"
+        sx={{ textShadow: "0.5px 0.3px 1.1px rgba(0, 0, 0, 0.5)" }}
+      >
+        Team Leaderboard
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="left" sx={{ fontWeight: "bold", fontSize: "1.2em" }}>
+                Rank
+              </TableCell>
+              <TableCell align="left" sx={{ fontWeight: "bold", fontSize: "1.2em" }}>
+                Team
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold", fontSize: "1.2em" }}>
+                Average Stack
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {leaderboard.teams.map((team, index) => (
+                <TableRow key={team.team_id}>
+                  <TableCell align="left" sx={{ fontSize: "1.2em" }}>
+                    {index === 0 && "🥇"}
+                    {index === 1 && "🥈"}
+                    {index === 2 && "🥉"}
+                    {index > 2 && (index + 1)}
+                  </TableCell>
+                  <TableCell align="left" sx={{ fontSize: "1.2em" }}>{team.team_name}</TableCell>
+                  <TableCell align="right" sx={{ fontSize: "1.2em" }}>
+                    ${team.avg_stack.toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }
 
