@@ -49,7 +49,7 @@ function Leaderboard() {
   
   return (
     <div className="leaderboard">
-      <h2>Team Leaderboard</h2>
+      <h2 style={{textAlign: "center"}}>Team Leaderboard</h2>
       
       <table>
         <thead>

@@ -135,31 +135,42 @@ function BettingForm({ gameState, phase }: BettingFormProps) {
       />
 
       {/* Slider for adjusting bet */}
-      <Slider
-        value={amount}
-        min={0}
-        max={gameState.current_stack}
-        step={1}
-        onChange={(e, newValue) => setAmount(newValue as number)}
-        sx={{
-          color: "#fd8a5e"
-        }}
-      />
+      {/* Slider Container */}
+<Box width="100%" display="flex" flexDirection="column" alignItems="center">
+  {/* Slider */}
+  <Box width="98%" display="flex" justifyContent="center">
+    <Slider
+      value={amount}
+      min={0}
+      max={gameState.current_stack}
+      step={1}
+      onChange={(e, newValue) => setAmount(newValue as number)}
+      sx={{
+        color: "#fd8a5e",
+        width: "100%", // Ensures it takes full width of parent
+      }}
+    />
+  </Box>
 
-      <Box display="flex" justifyContent="space-between" mt={-1}>
-        <Typography variant="body1">$0</Typography>
-        <Typography variant="body1">${gameState.current_stack}</Typography>
-      </Box>
+  {/* Labels for Start ($0) and End (Max Stack) */}
+  <Box width="98%" display="flex" justifyContent="space-between">
+    <Typography variant="body1">$0</Typography>
+    <Typography variant="body1" sx={{ textAlign: "right" }}>
+      ${gameState.current_stack}
+    </Typography>
+  </Box>
+</Box>
 
       {/* Buttons */}
-      <Box display="flex" justifyContent="space-between" mt={2}>
+      <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
+      <Box display="flex" justifyContent="space-between" mt={2} width={"100%"}>
         <Button 
           type="submit" 
           variant="contained" 
           color="primary" 
           disabled={loading}
           sx={{
-            fontSize: "1.25rem",
+            fontSize: "1rem",
             backgroundColor: "#3772ff",
             borderRadius: "1rem"
           }}
@@ -172,13 +183,14 @@ function BettingForm({ gameState, phase }: BettingFormProps) {
           onClick={handleClear}
           disabled={loading}
           sx={{
-            fontSize: "1.25rem",
+            fontSize: "1rem",
             backgroundColor: "#f44336",
             borderRadius: "1rem"
           }}
         >
           Clear Bet
         </Button>
+      </Box>
       </Box>
       
       {/* Error Message */}
