@@ -14,105 +14,76 @@ import { type GameState, RoundPhaseEnum } from '../../types';
 import { fetchData } from '../../utils/fetch-utils';
 import Instructions from '../common/Intructions';
 
+function hasPhaseChanged(prev: GameState | null, next: GameState): boolean {
+  if (!prev) return true;
+  return (
+    prev.current_phase !== next.current_phase ||
+    prev.round_id !== next.round_id
+  );
+}
+
 function GameContainer() {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [localTimer, setLocalTimer] = useState<number>(30);
-  const basePollInterval = 3000;
-  const lastPollTime = useRef<number>(Date.now());
-  const pollTimeoutRef = useRef<number | null>(null);
 
-  // Determine appropriate polling interval based on game state
-  const getPollInterval = useCallback((): number => {
-    if (!gameState) return 3000; // Default interval
+  // Refs to hold the latest values for our interval callback
+  const gameStateRef = useRef(gameState);
+  const localTimerRef = useRef(localTimer);
+  const pollCounterRef = useRef<number>(0);
 
-    // Poll more frequently during critical phases
-    if (gameState.current_phase === RoundPhaseEnum.RESULTS) {
-      return 1000; // Fast polling during results phase
-    }
+  // Update refs on state change so our interval always sees the latest values.
+  useEffect(() => {
+    gameStateRef.current = gameState;
+  }, [gameState]);
 
-    // Poll more frequently near phase transitions
-    if (localTimer <= 3) {
-      return 1000; // Fast polling for last 3 seconds of a phase
-    }
+  useEffect(() => {
+    localTimerRef.current = localTimer;
+  }, [localTimer]);
 
-    if (localTimer <= 10) {
-      return 2000; // Medium polling for last 10 seconds of a phase
-    }
-
-    return basePollInterval; // Normal polling otherwise
-  }, [gameState, localTimer, basePollInterval]);
-
-  // Main polling function with adaptive interval
-  const pollGameState = useCallback(async () => {
-    try {
-      const data = await fetchData<GameState>('/api/game/state/');
-      console.log(data)
-
-      // Update game state
-      setGameState(prev => {
-        // Only update if something changed (prevents unnecessary re-renders)
-        if (!prev ||
-          prev.current_phase !== data.current_phase ||
-          prev.round_id !== data.round_id ||
-          prev.current_stack !== data.current_stack ||
-          prev.result !== data.result ||
-          prev.status !== data.status) {
-          console.log("updating state: ", data);
-          return data;
+  // Single useEffect to handle polling and timer countdown.
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      // If we don't have a game state or we're waiting for the first round, poll every 3 seconds.
+      if (!gameStateRef.current || gameStateRef.current.waiting_for_first_round) {
+        pollCounterRef.current++;
+        if (pollCounterRef.current >= 3) {
+          try {
+            const data = await fetchData<GameState>('/api/game/state/');
+            console.log('polling');
+            // On the very first poll we want to sync the timer, or when waiting for first round.
+            if (hasPhaseChanged(gameStateRef.current, data) && data.time_remaining !== undefined) {
+              setLocalTimer(Math.floor(data.time_remaining));
+            }
+            setGameState(data);
+          } catch (error) {
+            console.error('Error fetching game state:', error);
+          }
+          pollCounterRef.current = 0; // reset counter after polling
         }
-        console.log(prev.current_phase === RoundPhaseEnum.RESULTS)
-        return prev;
-      });
-
-      // Sync local timer with server, but only if significantly different
-      if (data.time_remaining !== undefined &&
-        Math.abs((data.time_remaining - localTimer)) > 2) {
-        setLocalTimer(Math.floor(data.time_remaining));
+        return; // exit early so we don't run the countdown below
       }
 
-      // Record successful poll time
-      lastPollTime.current = Date.now();
+      // Game state exists and we're in an active round.
+      // Decrement the timer each second.
+      setLocalTimer(prev => Math.max(prev - 1, 0));
 
-      // Schedule next poll with dynamic interval
-      const interval = getPollInterval();
-
-      // Use window.setTimeout and store the numeric ID
-      pollTimeoutRef.current = window.setTimeout(pollGameState, interval);
-
-    } catch (error) {
-      console.error('Error fetching game state:', error);
-
-      // On error, back off polling frequency
-      pollTimeoutRef.current = window.setTimeout(pollGameState, 5000);
-    }
-  }, [getPollInterval, localTimer]);
-
-  // Initialize polling
-  useEffect(() => {
-    pollGameState();
-
-    return () => {
-      if (pollTimeoutRef.current !== null) {
-        // Use window.clearTimeout with the numeric ID
-        window.clearTimeout(pollTimeoutRef.current);
-      }
-    };
-  }, [pollGameState]);
-  // Local timer countdown - separate from polling
-  useEffect(() => {
-    const timerInterval = setInterval(() => {
-      setLocalTimer(prev => {
-        // If we haven't polled in 10 seconds, pause the timer
-        // This prevents timer from drifting too far from server
-        const timeSinceLastPoll = Date.now() - lastPollTime.current;
-        if (timeSinceLastPoll > 10000) {
-          return prev;
+      // When in the last 3 seconds, poll every second.
+      if (localTimerRef.current <= 3) {
+        try {
+          const data = await fetchData<GameState>('/api/game/state/');
+          console.log('polling');
+          // If the phase (or round) changed, sync the timer using the server's time.
+          if (hasPhaseChanged(gameStateRef.current, data) && data.time_remaining !== undefined) {
+            setLocalTimer(Math.floor(data.time_remaining));
+          }
+          setGameState(data);
+        } catch (error) {
+          console.error('Error fetching game state:', error);
         }
-        return Math.max(0, Math.floor(prev - 1));
-      });
-    }, 1000);
+      }
+    }, 1000); // interval ticks every second
 
-    return () => clearInterval(timerInterval);
+    return () => clearInterval(intervalId);
   }, []);
 
   if (!gameState) return <LoadingSpinner />;
