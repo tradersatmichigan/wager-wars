@@ -31,6 +31,7 @@ export interface GameState {
   round_completed?: boolean;
   team_id?: number;
   final_round: boolean;
+  team_name: string;
 }
 
 export interface PlayerBet {

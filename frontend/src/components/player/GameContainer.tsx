@@ -25,21 +25,21 @@ function GameContainer() {
   // Determine appropriate polling interval based on game state
   const getPollInterval = useCallback((): number => {
     if (!gameState) return 3000; // Default interval
-    
+
     // Poll more frequently during critical phases
     if (gameState.current_phase === RoundPhaseEnum.RESULTS) {
       return 1000; // Fast polling during results phase
     }
-    
+
     // Poll more frequently near phase transitions
     if (localTimer <= 3) {
       return 1000; // Fast polling for last 3 seconds of a phase
     }
-    
+
     if (localTimer <= 10) {
       return 2000; // Medium polling for last 10 seconds of a phase
     }
-    
+
     return basePollInterval; // Normal polling otherwise
   }, [gameState, localTimer, basePollInterval]);
 
@@ -48,57 +48,57 @@ function GameContainer() {
     try {
       const data = await fetchData<GameState>('/api/game/state/');
       console.log(data)
-      
+
       // Update game state
       setGameState(prev => {
         // Only update if something changed (prevents unnecessary re-renders)
-        if (!prev || 
-            prev.current_phase !== data.current_phase || 
-            prev.round_id !== data.round_id ||
-            prev.current_stack !== data.current_stack ||
-            prev.result !== data.result ||
-            prev.status !== data.status) {
+        if (!prev ||
+          prev.current_phase !== data.current_phase ||
+          prev.round_id !== data.round_id ||
+          prev.current_stack !== data.current_stack ||
+          prev.result !== data.result ||
+          prev.status !== data.status) {
           console.log("updating state: ", data);
           return data;
         }
         console.log(prev.current_phase === RoundPhaseEnum.RESULTS)
         return prev;
       });
-      
+
       // Sync local timer with server, but only if significantly different
-      if (data.time_remaining !== undefined && 
-          Math.abs((data.time_remaining - localTimer)) > 2) {
+      if (data.time_remaining !== undefined &&
+        Math.abs((data.time_remaining - localTimer)) > 2) {
         setLocalTimer(Math.floor(data.time_remaining));
       }
-      
+
       // Record successful poll time
       lastPollTime.current = Date.now();
-      
+
       // Schedule next poll with dynamic interval
       const interval = getPollInterval();
-      
+
       // Use window.setTimeout and store the numeric ID
       pollTimeoutRef.current = window.setTimeout(pollGameState, interval);
-      
+
     } catch (error) {
       console.error('Error fetching game state:', error);
-      
+
       // On error, back off polling frequency
       pollTimeoutRef.current = window.setTimeout(pollGameState, 5000);
     }
   }, [getPollInterval, localTimer]);
-  
+
   // Initialize polling
   useEffect(() => {
     pollGameState();
-    
+
     return () => {
       if (pollTimeoutRef.current !== null) {
         // Use window.clearTimeout with the numeric ID
         window.clearTimeout(pollTimeoutRef.current);
       }
     };
-  }, [pollGameState]);  
+  }, [pollGameState]);
   // Local timer countdown - separate from polling
   useEffect(() => {
     const timerInterval = setInterval(() => {
@@ -112,18 +112,18 @@ function GameContainer() {
         return Math.max(0, Math.floor(prev - 1));
       });
     }, 1000);
-    
+
     return () => clearInterval(timerInterval);
   }, []);
-  
+
   if (!gameState) return <LoadingSpinner />;
 
   if (gameState.waiting_for_first_round) {
     return (
       <div className="game-container">
         <Box display={"flex"} flexDirection="column" alignItems={"center"} width={"100%"} mt={3}>
-          
-          <Paper elevation={4} sx={{width: "90%"}}>
+
+          <Paper elevation={4} sx={{ width: "90%" }}>
             <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
               <Typography variant="h3" gutterBottom mt={3}>
                 Welcome to Wager Wars!
@@ -140,7 +140,7 @@ function GameContainer() {
       </div>
     );
   }
-  
+
   if (gameState.game_completed) {
     console.log("Game completed state detected");
     return (
@@ -149,7 +149,7 @@ function GameContainer() {
       </div>
     );
   }
-  
+
   //if (gameState.round_error) {
   //  return (
   //    <div className="game-container">
@@ -164,44 +164,48 @@ function GameContainer() {
   //}
 
   console.log(gameState.current_phase === RoundPhaseEnum.RESULTS);
-  
+
   return (
-    <Box 
-      display="flex" 
-      flexDirection="column" 
-      alignItems="center" 
-      width="100%" 
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      width="100%"
       padding={2}
     >
       {/* Wrap All Components in a Common Width */}
-      <Box 
+      <Box
         width="90%"  // Ensures all child components take the same width
         display="flex"
         flexDirection="column"
         alignItems="center"
         gap={1} // Adds spacing between sections
       >
-        <GameHeader 
+      
+        <GameHeader
           roundNumber={gameState.round_number || 0}
           question={gameState.question || ""}
           phase={gameState.current_phase || 0}
           timeRemaining={localTimer}
         />
-  
-        <PlayerInfo currentStack={gameState.current_stack} />
-  
+
+        <PlayerInfo
+          currentStack={gameState.current_stack}
+          teamName={gameState.team_name}
+        />
+
         {gameState.current_phase === RoundPhaseEnum.INITIAL_BETTING && (
           <BettingForm gameState={gameState} phase="initial" />
         )}
-  
+
         {gameState.current_phase === RoundPhaseEnum.INFORMATION && <TeamBetsDisplay />}
-  
+
         {gameState.current_phase === RoundPhaseEnum.FINAL_BETTING && (
           <BettingForm gameState={gameState} phase="final" />
         )}
-  
+
         {gameState.current_phase === RoundPhaseEnum.RESULTS && (
-          <ResultsDisplay 
+          <ResultsDisplay
             result={gameState.result}
             roundCompleted={gameState.round_completed}
           />
@@ -209,7 +213,7 @@ function GameContainer() {
       </Box>
     </Box>
   );
-  
+
 }
 
 export default GameContainer;

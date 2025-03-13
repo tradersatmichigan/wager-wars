@@ -14,7 +14,8 @@ urlpatterns = [
     path('api/teams/bets/', views.team_bets_summary, name='team_bets_summary'),
     path('api/teams/leaderboard/', views.team_leaderboard, name='team_leaderboard'),
     path('api/teams/performance/', views.team_performance, name='team_performance'),
-    
+    path('api/teams/stack/', views.get_team_stack, name='team_stack'),
+
     # Admin endpoints
     path('api/admin/rounds/', views.list_rounds, name='list_rounds'),
     path('api/admin/rounds/start/', views.start_round, name='start_round'),

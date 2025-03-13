@@ -13,6 +13,7 @@ from django.core.cache import cache
 from django.utils import timezone
 from django.db.models import Prefetch, Sum, Count
 from django.shortcuts import render
+from django.db.models import Sum
 
 from .models import (
     Game, 
@@ -78,6 +79,7 @@ def game_state(request: HttpRequest):
             'status': 'active',
             'server_timestamp': timezone.now().timestamp(),
             'current_round_number': game.current_round_number,
+            'team_name': request.user.player.team.name
         }
         
         # Check if game is currently in an active round
@@ -729,4 +731,26 @@ def end_game(request: HttpRequest):
     return JsonResponse({
         'success': True,
         'message': 'Game has been ended successfully'
+    })
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def get_team_stack(request: HttpRequest):
+    player = request.user.player
+    team = player.team
+    
+    if not team:
+        return JsonResponse({
+            'success': False,
+            'error': 'Player is not part of a team'
+        }, status=400)
+        
+    # Calculate the sum of current_stack for all players in the team
+    stack = Player.objects.filter(team=team).aggregate(
+        total_stack=Sum('current_stack')
+    )['total_stack'] or 0
+    
+    return JsonResponse({
+        'success': True,
+        'stack': stack
     })
