@@ -197,3 +197,4 @@ yarn-error.log*
 static/js/
 
 dump.rdb
+migrations/
