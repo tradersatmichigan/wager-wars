@@ -1,3 +1,4 @@
+import { Widgets } from '@mui/icons-material';
 import React from 'react';
 
 interface PlayerInfoProps {
@@ -7,7 +8,7 @@ interface PlayerInfoProps {
 
 function PlayerInfo({ currentStack, teamName }: PlayerInfoProps) {
   return (
-    <div className="player-info">
+    <div className="player-info" style={{width: "100%"}}>
       <div className="stack-container">
         <div className="stack-label">Your Stack</div>
         <div className="player-stack">${currentStack.toLocaleString()}</div>

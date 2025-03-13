@@ -133,7 +133,7 @@ function GameContainer() {
             <Box display={"flex"} flexDirection="column" alignItems={"center"} padding={"2rem 2rem"}>
               <Typography variant='h6' fontWeight={"bold"} color='var(--primary)'>Waiting for game to start...</Typography>
               <Typography variant='body1' fontWeight={"bold"} color='black'>We will begin shortly</Typography>
-              <Typography variant='h5' color='black'>You are on Team {gameState.team_id}</Typography>
+              <Typography mt={3} variant='h5' color='black'>You are on Team {gameState.team_id}</Typography>
             </Box>
           </Paper>
         </Box>
@@ -167,46 +167,50 @@ function GameContainer() {
   console.log(gameState.current_phase === RoundPhaseEnum.RESULTS);
   
   return (
-    <div className="game-container">
-      <GameHeader 
-        roundNumber={gameState.round_number || 0}
-        question={gameState.question || ""}
-        phase={gameState.current_phase || 0}
-        timeRemaining={localTimer}
-      />
-      
-      <PlayerInfo 
-        currentStack={gameState.current_stack} 
-      />
-      
-      {gameState.current_phase === RoundPhaseEnum.INITIAL_BETTING && (
-        <BettingForm 
-          gameState={gameState}
-          phase="initial"
+    <Box 
+      display="flex" 
+      flexDirection="column" 
+      alignItems="center" 
+      width="100%" 
+      padding={2}
+    >
+      {/* Wrap All Components in a Common Width */}
+      <Box 
+        width="90%"  // Ensures all child components take the same width
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        gap={1} // Adds spacing between sections
+      >
+        <GameHeader 
+          roundNumber={gameState.round_number || 0}
+          question={gameState.question || ""}
+          phase={gameState.current_phase || 0}
+          timeRemaining={localTimer}
         />
-      )}
-      
-      {gameState.current_phase === RoundPhaseEnum.INFORMATION && (
-        <>
-          <TeamBetsDisplay />
-        </>
-      )}
-      
-      {gameState.current_phase === RoundPhaseEnum.FINAL_BETTING && (
-        <BettingForm 
-          gameState={gameState}
-          phase="final"
-        />
-      )}
-      
-      {gameState.current_phase === RoundPhaseEnum.RESULTS && (
-        <ResultsDisplay 
-          result={gameState.result}
-          roundCompleted={gameState.round_completed}
-        />
-      )}
-    </div>
+  
+        <PlayerInfo currentStack={gameState.current_stack} />
+  
+        {gameState.current_phase === RoundPhaseEnum.INITIAL_BETTING && (
+          <BettingForm gameState={gameState} phase="initial" />
+        )}
+  
+        {gameState.current_phase === RoundPhaseEnum.INFORMATION && <TeamBetsDisplay />}
+  
+        {gameState.current_phase === RoundPhaseEnum.FINAL_BETTING && (
+          <BettingForm gameState={gameState} phase="final" />
+        )}
+  
+        {gameState.current_phase === RoundPhaseEnum.RESULTS && (
+          <ResultsDisplay 
+            result={gameState.result}
+            roundCompleted={gameState.round_completed}
+          />
+        )}
+      </Box>
+    </Box>
   );
+  
 }
 
 export default GameContainer;

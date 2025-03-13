@@ -22,7 +22,7 @@ function GameHeader({ roundNumber, question, phase, timeRemaining }: GameHeaderP
   }
   
   return (
-    <div className="game-header">
+    <div className="game-header" style={{width: "100%"}}>
       <div className="player-round-info">
         <h2>{question}</h2>
         <div className="phase-name">Phase: {phaseNames[phase]}</div>
