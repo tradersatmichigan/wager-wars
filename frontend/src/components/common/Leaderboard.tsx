@@ -56,7 +56,7 @@ function Leaderboard() {
           <tr>
             <th>Rank</th>
             <th>Team</th>
-            <th>Total Stack</th>
+            <th>Average Stack</th>
           </tr>
         </thead>
         <tbody style={{color: "black"}}>
@@ -67,7 +67,7 @@ function Leaderboard() {
             >
               <td>{index + 1}</td>
               <td>{team.team_name}</td>
-              <td>${team.total_stack.toLocaleString()}</td>
+              <td>${team.avg_stack.toLocaleString()}</td>
             </tr>
           ))}
         </tbody>

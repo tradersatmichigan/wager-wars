@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.core.cache import cache
 from django.utils import timezone
-from django.db.models import Prefetch, Sum
+from django.db.models import Prefetch, Sum, Count
 from django.shortcuts import render
 
 from .models import (
@@ -368,24 +368,35 @@ def team_bets_summary(request: HttpRequest):
 @csrf_exempt
 def team_leaderboard(request: HttpRequest):
     """Get the current team leaderboard."""
-    # Get all teams with aggregated stack values
+    # Get all teams with aggregated stack values and player count
     teams = Team.objects.annotate(
-        total_stack=Sum('players__current_stack')
+        total_stack=Sum('players__current_stack'),
+        player_count=Count('players')
     ).prefetch_related(
         Prefetch(
             'players',
             queryset=Player.objects.select_related('user')
         )
-    ).order_by('-total_stack')
+    )
+    
+    # Calculate average stack for each team and sort
+    teams = sorted(
+        teams,
+        key=lambda team: team.total_stack / team.player_count if team.player_count > 0 else 0,
+        reverse=True
+    )
     
     results = []
     for team in teams:
         players = Player.objects.filter(team=team).select_related('user')
+        avg_stack = team.total_stack / team.player_count if team.player_count > 0 else 0
         
         results.append({
             'team_name': team.name,
             'team_id': team.id,
             'total_stack': float(team.total_stack),
+            'avg_stack': float(avg_stack),
+            'player_count': team.player_count,
             'players': [
                 {
                     'player_name': player.user.username,

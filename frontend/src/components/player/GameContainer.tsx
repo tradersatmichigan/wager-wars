@@ -146,7 +146,6 @@ function GameContainer() {
     return (
       <div className="game-container">
         <GameOverScreen gameState={gameState} />
-        <Leaderboard />
       </div>
     );
   }
