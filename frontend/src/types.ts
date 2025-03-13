@@ -59,6 +59,7 @@ export interface TeamStanding {
   team_name: string;
   team_id: number;
   total_stack: number;
+  avg_stack: number;
   players: PlayerStanding[];
 }
 
