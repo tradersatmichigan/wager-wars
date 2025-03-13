@@ -115,7 +115,7 @@ function BettingForm({ gameState, phase }: BettingFormProps) {
         {phase === 'initial' ? 'Initial Betting' : 'Final Betting'}
       </Typography>
       <Typography variant="h4" fontWeight="bold" color="#3772ff" sx={{ textAlign: 'right' }}>
-        Odds: {odds()}
+        Odds - {odds()}
       </Typography>
     </Box>
     

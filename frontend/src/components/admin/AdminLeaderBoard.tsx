@@ -61,7 +61,7 @@ function AdminLeaderBoard({
     return (
       <Box className="admin-projection-panel" justifyContent={"center"} sx={{ display: "flex", flexDirection: "column", height: "100vh"}}>
         <Box width={"60%"}>
-            <Leaderboard />
+            {isLastRound ? null : <Leaderboard />}
             <Box display={"flex"} flexDirection="column" alignItems={"center"}>
             {isLastRound ? (
             <>
