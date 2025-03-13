@@ -79,7 +79,7 @@ def game_state(request: HttpRequest):
             'status': 'active',
             'server_timestamp': timezone.now().timestamp(),
             'current_round_number': game.current_round_number,
-            'team_name': request.user.player.team.name if request.user.player.team else ""
+            'team_name': request.user.player.team.name if request.user.player.team else "TEAM IS NULL"
         }
         
         # Check if game is currently in an active round
@@ -738,7 +738,7 @@ def end_game(request: HttpRequest):
         'message': 'Game has been ended successfully'
     })
 
-@require_http_methods(["POST"])
+@require_http_methods(["GET"])
 @csrf_exempt
 def get_team_stack(request: HttpRequest):
     player = request.user.player

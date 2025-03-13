@@ -8,10 +8,11 @@ interface PlayerInfoProps {
 function PlayerInfo({ currentStack, teamName }: PlayerInfoProps) {
   // useState to hold state of player stack and team stack
   const [playerStack, setPlayerStack] = useState(currentStack);
-  const [teamStack, setTeamStack] = useState<number | null>(null);
+  const [teamStack, setTeamStack] = useState<number>(0);
 
   // useEffect to get player and team stack
   useEffect(() => {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
     // Initialize player stack with the prop value
     setPlayerStack(currentStack);
 
@@ -19,14 +20,9 @@ function PlayerInfo({ currentStack, teamName }: PlayerInfoProps) {
     const fetchTeamStack = async () => {
       try {
         const response = await fetch('/api/teams/stack/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          method: 'GET',
         });
         
-        console.log('Status:', response.status);
-        console.log('Content-Type:', response.headers.get('content-type'));
         const data = await response.json();
         
         if (data.success) {
@@ -40,7 +36,6 @@ function PlayerInfo({ currentStack, teamName }: PlayerInfoProps) {
       }
     };
 
-
     fetchTeamStack();
   }, [currentStack, teamName]);
 
@@ -51,19 +46,15 @@ function PlayerInfo({ currentStack, teamName }: PlayerInfoProps) {
         <div className="player-stack">${playerStack.toLocaleString()}</div>
       </div>
 
-      {teamStack !== null && teamName && (
-        <div className="team-container">
-          <div className="team-label">Team Stack</div>
-          <div className="player-stack">${teamStack.toLocaleString()}</div>
-        </div>
-      )}
+      <div className="team-container">
+        <div className="team-label">Team Stack</div>
+        <div className="player-stack">${teamStack.toLocaleString()}</div>
+      </div>
 
-      {teamName && (
-        <div className="team-container">
-          <div className="team-label">Team</div>
-          <div className="player-stack">{teamName}</div>
-        </div>
-      )}
+      <div className="team-container">
+        <div className="team-label">Team</div>
+        <div className="player-stack">{teamName}</div>
+      </div>
     </div>
   );
 }
