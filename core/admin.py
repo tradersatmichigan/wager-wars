@@ -184,7 +184,7 @@ class TeamAdmin(admin.ModelAdmin):
         """Logic to create random teams of optimal size"""
         with transaction.atomic():
             # Get all players without a team
-            unassigned_players = Player.objects.filter(team__isnull=True)
+            unassigned_players = Player.objects.filter(team__isnull=True, is_admin=False)
             total_players = unassigned_players.count()
             
             if total_players == 0:

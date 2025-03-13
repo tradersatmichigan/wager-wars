@@ -18,11 +18,7 @@ function GameOverScreen({ gameState }: GameOverScreenProps) {
       try {
         console.log("Fetching team stack...");
         const response = await fetch('/api/teams/stack/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
+          method: 'GET',
         });
 
         console.log("Response status:", response.status);
@@ -56,7 +52,7 @@ function GameOverScreen({ gameState }: GameOverScreenProps) {
       </div>
       {teamStack !== null && (
         <div className="final-stack">
-          <h3>Your Final Stack</h3>
+          <h3>Your Final Team Stack</h3>
           <div className="player-stack">
             ${teamStack.toLocaleString()}
           </div>
