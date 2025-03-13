@@ -194,7 +194,7 @@ def game_state(request: HttpRequest):
                     })
         
         # Cache the shared state for 2 seconds
-        cache.set(shared_cache_key, shared_data, 4)
+        cache.set(shared_cache_key, shared_data, 1)
     
     # Now add player-specific data
     response_data = shared_data.copy()
