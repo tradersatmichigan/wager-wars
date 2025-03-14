@@ -157,11 +157,11 @@ function AdminProjectionPanel() {
     return <AdminGameOverScreen />;
   }
   
-  if (test) {
-    return (
-      <AdminGameOverScreen/>
-    );
-  }
+  // if (test) {
+  //   return (
+  //     <AdminGameOverScreen/>
+  //   );
+  // }
 
   // Handle simulation states
   if (simulationState === 'running') {
