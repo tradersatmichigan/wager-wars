@@ -6,8 +6,6 @@ interface TeamBetsResultProps {
 }
 
 function TeamBetsResult({ members }: TeamBetsResultProps) {
-  console.log("TeamBetsResult rendering with members:", members);
-  
   // Sum up the team's profit
   const totalProfit = members.reduce((sum, member) => sum + member.profit, 0);
   

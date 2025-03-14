@@ -10,13 +10,8 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
   const chartRef = useRef<HTMLDivElement>(null);
   const initialTeamStack = 3000
 
-  console.log("TeamPerformanceGraph rendering with data:", historicalData);
   
   useEffect(() => {
-    console.log("TeamPerformanceGraph useEffect running");
-    console.log("chartRef.current:", chartRef.current);
-    console.log("historicalData:", JSON.stringify(historicalData));
-    
     if (!chartRef.current) {
       console.error("Chart container ref is null");
       return;
@@ -51,8 +46,6 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
       const width = 500; // Fallback width
       const height = 200;
       const padding = { top: 20, right: 20, bottom: 30, left: 50 };
-      
-      console.log("Chart dimensions:", { width, height });
       
       // Clear any existing chart
       while (chartRef.current.firstChild) {
@@ -188,7 +181,6 @@ function TeamPerformanceGraph({ historicalData }: TeamPerformanceGraphProps) {
         });
       });
       
-      console.log("Graph rendered successfully");
     } catch (error) {
       console.error("Error rendering graph:", error);
       

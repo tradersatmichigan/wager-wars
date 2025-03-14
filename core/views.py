@@ -3,6 +3,7 @@ import random
 from decimal import Decimal
 from functools import wraps
 import time
+import re
 
 from django.http import HttpRequest, JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
@@ -79,7 +80,6 @@ def game_state(request: HttpRequest):
             'status': 'active',
             'server_timestamp': timezone.now().timestamp(),
             'current_round_number': game.current_round_number,
-            'team_name': request.user.player.team.name if request.user.player.team else "TEAM IS NULL"
         }
         
         # Check if game is currently in an active round
@@ -193,13 +193,14 @@ def game_state(request: HttpRequest):
                         'next_round_number': 1,
                     })
         
-        # Cache the shared state for 2 seconds
+        # Cache the shared state for 1 second
         cache.set(shared_cache_key, shared_data, 1)
     
     # Now add player-specific data
     response_data = shared_data.copy()
     response_data['current_stack'] = float(player.current_stack)
     response_data['team_id'] = player_team_id
+    response_data['team_name'] = player.team.name if player.team else ""
     
     return JsonResponse(response_data)
 
@@ -343,7 +344,7 @@ def team_bets_summary(request: HttpRequest):
         for player in team.players.all():
             bet = player_bet_map.get(player.id)
             player_bet = {
-                'player_name': player.user.username,
+                'player_name': re.sub(r'([a-z])([A-Z])', r'\1 \2', player.user.username),
                 'amount': float(bet.amount) if bet else 0,
             }
             team_bets.append(player_bet)
@@ -401,7 +402,7 @@ def team_leaderboard(request: HttpRequest):
             'player_count': team.player_count,
             'players': [
                 {
-                    'player_name': player.user.username,
+                    'player_name': re.sub(r'([a-z])([A-Z])', r'\1 \2', player.user.username),
                     'current_stack': float(player.current_stack),
                 }
                 for player in players
@@ -471,7 +472,7 @@ def team_performance(request: HttpRequest):
             result = 'no bet'
             
         members_data.append({
-            'player_name': member.user.username,
+            'player_name': re.sub(r'([a-z])([A-Z])', r'\1 \2', member.user.username),
             'bet_amount': bet_amount,
             'profit': profit,
             'result': result

@@ -51,8 +51,6 @@ function AdminProjectionPanel() {
         if (pollCounterRef.current >= 3) {
           try {
             const data = await fetchData<GameState>('/api/game/state/');
-            console.log('polling');
-            console.log(data.time_remaining);
             // On the very first poll or when waiting, sync the timer.
             if (hasPhaseChanged(gameStateRef.current, data) && data.time_remaining !== undefined) {
               setLocalTimer(Math.floor(data.time_remaining));
@@ -73,7 +71,6 @@ function AdminProjectionPanel() {
       if (localTimerRef.current <= 3) {
         try {
           const data = await fetchData<GameState>('/api/game/state/');
-          console.log('polling');
           // If a new phase/round is detected, sync the timer.
           if (hasPhaseChanged(gameStateRef.current, data) && data.time_remaining !== undefined) {
             setLocalTimer(Math.floor(data.time_remaining));
@@ -133,7 +130,6 @@ function AdminProjectionPanel() {
           
           // Refresh game state after simulation
           const gameData = await fetchData<GameState>('/api/game/state/');
-          console.log('polling');
           setGameState(gameData);
         } catch (error: any) {
           console.error('Error simulating round:', error);
@@ -153,7 +149,6 @@ function AdminProjectionPanel() {
   
   // Handle game completed state - NEW SECTION
   if (gameState.game_completed) {
-    console.log('Game completed state detected in AdminProjectionPanel');
     return <AdminGameOverScreen />;
   }
   

@@ -48,7 +48,6 @@ function AdminLeaderBoard({
   const handleEndGame = async () => {
     setEndingGame(true);
     try {
-      console.log("Ending game via API...");
       await postData('/api/admin/game/end/', {});
       setTimeout(() => {
         window.location.reload();
@@ -117,6 +116,7 @@ function AdminLeaderBoard({
             onClick={startNextRound} 
             className="next-round-button"
             disabled={loading}
+            style={{marginBottom: "20px"}}
           >
             {loading ? 'Continuing...' : 'Next Round'}
           </button>

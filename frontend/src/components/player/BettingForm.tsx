@@ -194,11 +194,11 @@ function BettingForm({ gameState, phase }: BettingFormProps) {
       </Box>
       
       {/* Error Message */}
-      {error && (
+      {/*error && (
         <Typography color="error" mt={2} textAlign="center">
           {error}
         </Typography>
-      )}
+      )*/}
 
       {/* Last Placed Bet */}
       {lastPlacedBet !== null && (

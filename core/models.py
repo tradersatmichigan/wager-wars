@@ -63,7 +63,7 @@ class Round(models.Model):
         default=RoundStatusEnum.PENDING
     )
     start_time = models.DateTimeField(null=True, blank=True)
-    phase_duration = models.PositiveIntegerField(default=5)  # Duration in seconds
+    phase_duration = models.PositiveIntegerField(default=30)  # Duration in seconds
     current_phase = models.IntegerField(
         choices=RoundPhaseEnum.choices,
         default=RoundPhaseEnum.INITIAL_BETTING

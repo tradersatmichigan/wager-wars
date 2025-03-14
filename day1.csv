@@ -1,0 +1,17 @@
+Question,Payout Odds,True Probability
+There is a coin that lands heads 45% of the time. You get paid out if the coin lands heads.,1.5,0.45
+"You draw two cards from a standard deck. If the two cards are the same rank, you get paid out. ",30,0.058888
+You roll 3 dice. You get paid out if the sum is at least 10.,1,0.625
+"You draw 3 draws from a standard normal (0,1) distribution. If no draw exceeds 1 you get paid out. ",1.5,0.5954
+There is a coin that lands heads 30% of the time. You get paid out if the coin lands heads.,3,0.3
+"You draw 3 cards from a standard deck. If the 3 cards are black, red, black (IN THAT ORDER), you get paid out.",10,0.1275
+You roll a dice. If the number is a perfect square you get paid out.,2.2,0.333333
+"You keep drawing from a uniform [0,1] until the sum of the draws exceeds 1. If we require more than 2 draws, you get paid out.",2,0.5
+There is a coin that lands heads 60% of the time. You get paid out if the coin lands heads.,1,0.6
+You draw two cards from a standard deck. If the two cards are drawn in strictly increasing order you get paid out (Ace is high).,1,0.47059
+"You roll 4 dice. If the product of the rolls is even, you get paid out.",0.5,0.9375
+"We flip 1000 fair coins. If more than 530 of them are heads, you get paid out. ",100,0.0289
+There is a coin that lands heads 20% of the time. You get paid out if the coin lands heads.,6.5,0.2
+"You have a poker hand. If you hit three of a kind, you get paid out. ",40,0.0422
+You roll 100 dice. You get paid out if the sum of the rolls is even.,1.1,0.5
+"You draw two draws from a standard normal (0,1). If the difference between the draws is greater than 1, you get paid out. ",2,0.4795

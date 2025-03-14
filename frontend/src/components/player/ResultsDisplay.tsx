@@ -15,25 +15,20 @@ function ResultsDisplay({ result, roundCompleted }: ResultsDisplayProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   
-  console.log("ResultsDisplay rendered, roundCompleted:", roundCompleted, "result:", result);
-  
   // Only fetch team performance data when round has a result AND is completed
   useEffect(() => {
     const fetchTeamPerformance = async (): Promise<void> => {
       // Don't fetch if simulation hasn't been run yet (result is undefined)
       // or if the round isn't completed
       if (result === undefined || result === null || !roundCompleted) {
-        console.log("Skipping performance fetch - simulation not run yet or round not completed");
         return;
       }
       
-      console.log("Fetching team performance data...");
       setLoading(true);
       setError(null);
       
       try {
         const data = await fetchData<TeamPerformanceData>('/api/teams/performance/');
-        console.log("Team performance data received:", data);
         
         if (!data || !data.historical_data || !data.team_members) {
           throw new Error("Invalid performance data received");
@@ -89,11 +84,11 @@ function ResultsDisplay({ result, roundCompleted }: ResultsDisplayProps) {
         </div>
       )}
       
-      {error && (
+      {/*error && (
         <div className="error-message" style={{ color: 'red', textAlign: 'center', padding: '20px' }}>
           {error}
         </div>
-      )}
+      )*/}
       
       {!loading && teamPerformance && (
         <Box display={"flex"} flexDirection={"row"} alignItems={"center"} justifyContent={"center"}>

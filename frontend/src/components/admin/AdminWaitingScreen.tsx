@@ -41,24 +41,29 @@ function AdminWaitingScreen({
                     How to Play:
                   </Typography>
                 </div>
-                <List>
+                <List sx={{ 
+                  "& .MuiListItemText-primary": {
+                    color: "white",
+                    fontSize: "1.1em"
+                  }
+                }}>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="Players will be assigned into teams of 8, and each player will recieve $10,000 to start." />
+                    <ListItemText primary="Players will be randomly assigned to team with each player starting with $10,000." />
                   </ListItem>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="There will be 15 rounds of play. During each round, players will be asked a question (e.g. 'How much are you willing to bet this coin lands on heads?'). Each question will have a different EV and a different risk to reward ratio." />
+                    <ListItemText primary="There will be multiple rounds of play. During each round, players will be posed a scenario (e.g. 'A coin has a 100% chance of landing on heads. Bet on this outcome.'). Each question will have assigned odds that determine the payout on your bets." />
                   </ListItem>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="You will be given 30 seconds to decide on how much you are willing to risk on the event. Feel free to dicuss with your team to come up with collective strategy." />
+                    <ListItemText primary="You will be given 30 seconds to decide on how much you are willing to risk on the event. Feel free to dicuss with your team to come up with collective strategy." />
                   </ListItem>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="Betting will then be paused and you will have 30 seconds to see all the bets being placed by other teams. After this period, you will have a final 30 seconds to change your bet." />
+                    <ListItemText primary="Betting will then be paused and you will have 30 seconds to see all the bets placed by other teams. After this period, you will have a final 30 seconds to change your bet." />
                   </ListItem>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="At the end of each round, depending on the actual outcome of the coin toss (or some other event), you will either be rewarded with your bet being multiplied or lose your bet entirely." />
+                    <ListItemText primary="At the end of each round, depending on the actual outcome of the coin toss (or some other event), you will either be rewarded based on the odds given, or lose your bet entirely." />
                   </ListItem>
                   <ListItem>
-                    <ListItemText sx={{ color: "white"}} primary="At the end of the 15 rounds, the team with the largest collective cash pool wins!" />
+                    <ListItemText primary="At the end of the game, the team with the largest average stack wins!" />
                   </ListItem>
                 </List>
               </Box>
@@ -93,13 +98,6 @@ function AdminWaitingScreen({
                 >
                   Start Round {nextRoundNumber}
                 </button>
-                
-
-                <br />
-                <div className="admin-help-text">
-                  Press to begin the round when everyone is ready
-                </div>
-
               </Box>
             </Stack>
           </Box>

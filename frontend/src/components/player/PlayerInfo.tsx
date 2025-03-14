@@ -27,7 +27,6 @@ function PlayerInfo({ currentStack, teamName }: PlayerInfoProps) {
         
         if (data.success) {
           setTeamStack(data.stack);
-          console.log(data.stack);
         } else {
           console.error('Failed to fetch team stack:', data.error);
         }

@@ -49,7 +49,6 @@ function GameContainer() {
         if (pollCounterRef.current >= 3) {
           try {
             const data = await fetchData<GameState>('/api/game/state/');
-            console.log('polling');
             // On the very first poll we want to sync the timer, or when waiting for first round.
             if (hasPhaseChanged(gameStateRef.current, data) && data.time_remaining !== undefined) {
               setLocalTimer(Math.floor(data.time_remaining));
@@ -68,10 +67,9 @@ function GameContainer() {
       setLocalTimer(prev => Math.max(prev - 1, 0));
 
       // When in the last 3 seconds, poll every second.
-      if (localTimerRef.current <= 3) {
+      if (localTimerRef.current <= 3 && !gameState?.game_completed) {
         try {
           const data = await fetchData<GameState>('/api/game/state/');
-          console.log('polling');
           // If the phase (or round) changed, sync the timer using the server's time.
           if (hasPhaseChanged(gameStateRef.current, data) && data.time_remaining !== undefined) {
             setLocalTimer(Math.floor(data.time_remaining));
@@ -112,7 +110,6 @@ function GameContainer() {
   }
 
   if (gameState.game_completed) {
-    console.log("Game completed state detected");
     return (
       <div className="game-container">
         <GameOverScreen gameState={gameState} />
@@ -133,7 +130,6 @@ function GameContainer() {
   //  );
   //}
 
-  console.log(gameState.current_phase === RoundPhaseEnum.RESULTS);
 
   return (
     <Box

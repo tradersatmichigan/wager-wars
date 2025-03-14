@@ -45,7 +45,6 @@ function AdminResultScreen({
   const handleEndGame = async () => {
     setEndingGame(true);
     try {
-      console.log("Ending game via API...");
       // Make actual API call to end the game
       await postData('/api/admin/game/end/', {});
       
