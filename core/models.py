@@ -26,8 +26,8 @@ class Team(models.Model):
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, related_name='players', on_delete=models.SET_NULL, null=True, blank=True)
-    starting_stack = models.DecimalField(max_digits=10, decimal_places=2, default=1000.00)
-    current_stack = models.DecimalField(max_digits=10, decimal_places=2, default=1000.00)
+    starting_stack = models.DecimalField(max_digits=10, decimal_places=2, default=10000.00)
+    current_stack = models.DecimalField(max_digits=10, decimal_places=2, default=10000.00)
     is_admin = models.BooleanField(default=False)
     
     def __str__(self):

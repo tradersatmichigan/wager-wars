@@ -93,7 +93,7 @@ function TeamBetsResult({ members }: TeamBetsResultProps) {
                   }}>
                     {member.result === 'won' ? 'Won' : 
                      member.result === 'lost' ? 'Lost' : 
-                     'No Bet'}
+                     '-'}
                   </span>
                 </td>
               </tr>
