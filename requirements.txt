@@ -1,4 +1,6 @@
 django
 psycopg
 psycopg-binary
-
+django-redis
+redis
+django-db-connection-pool

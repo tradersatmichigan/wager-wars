@@ -10,6 +10,9 @@ import {
 } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import NavBar from './client/base';
+import { useState, useEffect } from 'react';
+import AdminPage from './pages/AdminPage';
+import PlayerPage from './pages/PlayerPage';
 
 const Root = () => {
   const containerStyle = {
@@ -33,22 +36,41 @@ const Root = () => {
    * else, return the player flow
    */
 
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
-  let is_admin = false
-  if (is_admin) {
-    return (
-      <Box sx={containerStyle}>
-        <Outlet />
-      </Box>
-    );
-  } else {
-    return (
-      <>
-        <NavBar/>
-        <Outlet/>
-      </>
-    )
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const response = await fetch("/api/isadmin/");
+        const data = await response.json();
+
+        if (!response.ok) throw new Error(data.error || "Failed to check admin");
+
+        setIsAdmin(data.is_admin);
+      } catch (error) {
+        console.error("Error checking admin status:", error);
+        setIsAdmin(false);
+      }
+    };
+
+    checkAdmin();
+  }, []);
+
+  if (isAdmin === null) {
+    return <div>Loading...</div>;
   }
+
+  return isAdmin ?
+    (
+      <>
+      <AdminPage />
+      </>
+  ) :
+    (
+      <>
+      <PlayerPage />
+      </>
+  )
 };
 
 export default Root;
