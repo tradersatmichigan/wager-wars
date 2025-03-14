@@ -20,30 +20,34 @@ const BasePodiumBox = styled(Paper)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
   borderRadius: "8px",
   boxShadow: theme.shadows[4],
-  background:
-    "linear-gradient(to right, #03264E 0%, #064389 7%, #064389 93%, #03264E 100%)",
   color: "#fff",
 }));
 
-// podiums
+// Podiums with standardized gradients
 const FirstPlacePodium = styled(BasePodiumBox)(() => ({
   height: "217px",
-  backgroundColor: "#053976",
   background:
-    "linear-gradient(to right, #043062 0%, #064389 5%, #064389 95%, #043062 100%)",
+    "linear-gradient(to right, #D4A52F 0%, #FFCE44 20%, #FFCE44 80%, #D4A52F 100%)",
+  color: "#000", // Better contrast
 }));
+
 const SecondPlacePodium = styled(BasePodiumBox)(() => ({
   height: "155px",
+  background:
+    "linear-gradient(to right, #03264E 0%, #064389 20%, #064389 80%, #03264E 100%)",
 }));
+
 const ThirdPlacePodium = styled(BasePodiumBox)(() => ({
   height: "112px",
+  background:
+    "linear-gradient(to right, #03264E 0%, #064389 20%, #064389 80%, #03264E 100%)",
 }));
 
 const MedalEmoji = styled(Typography)(({ theme }) => ({
   position: "absolute",
   top: 0,
   left: "50%",
-  transform: "translate(-50%, -14%)", // adjust this percentage to adjust the height of the medals
+  transform: "translate(-50%, -14%)",
   fontSize: "4.4rem",
 }));
 
@@ -74,7 +78,7 @@ function AdminGameOverScreen() {
     <div className="admin-projection-panel">
       
       {/* HEADER */}
-      <Box textAlign="center" mb={4} mt={6}>
+      <Box textAlign="center" mb={2} mt={3}>
         <Typography
           variant="h3"
           fontWeight="bold"
@@ -93,8 +97,9 @@ function AdminGameOverScreen() {
         display="flex"
         justifyContent="center"
         alignItems="flex-end"
-        mb={6}
-        sx={{ gap: 0 }}
+        mb={3}
+        sx={{ gap: 1, backgroundColor: "#2d4a7c", borderRadius: "2rem" }}
+        padding={"3rem"}
       >
         {/* SECOND PLACE */}
         <Box display="flex" flexDirection="column" alignItems="center">
@@ -158,6 +163,7 @@ function AdminGameOverScreen() {
       </Box>
 
       <Leaderboard />
+      <Box mb={6}></Box>
     </div>
   );
 }

@@ -52,6 +52,7 @@ function AdminProjectionPanel() {
           try {
             const data = await fetchData<GameState>('/api/game/state/');
             console.log('polling');
+            console.log(data.time_remaining);
             // On the very first poll or when waiting, sync the timer.
             if (hasPhaseChanged(gameStateRef.current, data) && data.time_remaining !== undefined) {
               setLocalTimer(Math.floor(data.time_remaining));
@@ -102,6 +103,9 @@ function AdminProjectionPanel() {
       const data = await fetchData<GameState>('/api/game/state/');
       setGameState(data);
       setSimulationState('idle');
+      if (data.time_remaining !== undefined) {
+        setLocalTimer(Math.floor(data.time_remaining));
+      }
     } catch (error: any) {
       console.error('Error starting round:', error);
     } finally {
@@ -153,15 +157,11 @@ function AdminProjectionPanel() {
     return <AdminGameOverScreen />;
   }
   
-  // if (test) {
-  //   return (
-  //     <AdminLeaderBoard 
-  //       gameState={gameState}
-  //       startNextRound={startNextRound}
-  //       loading={loading}
-  //     />
-  //   );
-  // }
+  if (test) {
+    return (
+      <AdminGameOverScreen/>
+    );
+  }
 
   // Handle simulation states
   if (simulationState === 'running') {
