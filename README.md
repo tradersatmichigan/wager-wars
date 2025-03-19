@@ -55,7 +55,7 @@ touch .pgpass
 echo "HOST:POST:NAME:USER:<password>" > .pgpass
 touch .SECRETS
 cat <<EOF > .SECRETS
-export PGNAME=wagerwars_db
+export PGNAME=wager_db
 export PGPASSWORD=<password>
 export PGHOST=localhost
 EOF
